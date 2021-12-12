@@ -1,19 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">@color/green</color>
+    <color name="colorPrimary">@color/red</color>
     <color name="colorPrimaryDark">#000</color>
-    <color name="colorAccent">#03E6C5</color>
+    <color name="colorAccent">@color/red</color>
     <color name="black">#000</color>
     <color name="app_yellow">#F6C214</color>
     <color name="app_grey">#707070</color>
-    <color name="green">#27ae60</color>
+    <color name="green">@color/red</color>
     <color name="red">#b71540</color>
-    <color name="green_100">#D4FAD4</color>
-    <color name="green_200">#AAF6B3</color>
-    <color name="green_300">#7BE693</color>
-    <color name="green_400">#56CE7D</color>
-    <color name="green_500">#27AE60</color>
+    <color name="green_100">#66B71540</color>
+    <color name="green_200">#73B71540</color>
+    <color name="green_300">#99B71540</color>
+    <color name="green_400">#CCB71540</color>
+    <color name="green_500">@color/red</color>
     <color name="green_900">#075345</color>
     <color name="app_blue">#20ADDC</color>
     <color name="white">#FFF</color>
 </resources>
+
+    <!--<?xml version="1.0" encoding="utf-8"?>-->
+    <!--<resources>-->
+    <!--    <color name="colorPrimary">@color/green</color>-->
+    <!--    <color name="colorPrimaryDark">#000</color>-->
+    <!--    <color name="colorAccent">#03E6C5</color>-->
+    <!--    <color name="black">#000</color>-->
+    <!--    <color name="app_yellow">#F6C214</color>-->
+    <!--    <color name="app_grey">#707070</color>-->
+    <!--    <color name="green">#27ae60</color>-->
+    <!--    <color name="red">#b71540</color>-->
+    <!--    <color name="green_100">#D4FAD4</color>-->
+    <!--    <color name="green_200">#AAF6B3</color>-->
+    <!--    <color name="green_300">#7BE693</color>-->
+    <!--    <color name="green_400">#56CE7D</color>-->
+    <!--    <color name="green_500">#27AE60</color>-->
+    <!--    <color name="green_900">#075345</color>-->
+    <!--    <color name="app_blue">#20ADDC</color>-->
+    <!--    <color name="white">#FFF</color>-->
+    <!--</resources>-->

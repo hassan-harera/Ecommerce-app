@@ -4,6 +4,7 @@ import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import com.opensooq.supernova.gligar.GligarPicker
+import java.io.ByteArrayOutputStream
 
 class BitmapUtils {
 
@@ -17,6 +18,12 @@ class BitmapUtils {
                 }
             }
             return null
+        }
+
+        fun convertImageBitmapToByteArray(imageBitmap: Bitmap): ByteArray {
+            val inputStream = ByteArrayOutputStream()
+            imageBitmap.compress(Bitmap.CompressFormat.PNG, 0, inputStream)
+            return inputStream.toByteArray()
         }
     }
 }

@@ -12,6 +12,10 @@ data class Response<out T>(val status: Status, val data: T?, val error: Exceptio
             return Response(Status.ERROR, data, error)
         }
 
+        fun <T> error(error: Throwable?, data: T?): Response<T> {
+            return Response(Status.ERROR, data, Exception(error))
+        }
+
         fun <T> loading(data: T?): Response<T> {
             return Response(Status.LOADING, data, null)
         }

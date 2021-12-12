@@ -5,8 +5,7 @@ import android.view.WindowManager
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.harera.common.R
-import com.harera.ui_components.loading.LoadingDialog
-import dagger.hilt.android.AndroidEntryPoint
+import com.harera.common.ui.LoadingDialog
 
 open class BaseActivity : AppCompatActivity() {
     private val loadingDialog: LoadingDialog by lazy {
@@ -31,7 +30,7 @@ open class BaseActivity : AppCompatActivity() {
         this.window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN)
     }
 
-    fun handleFailure(exception : Exception?) {
+    fun handleFailure(exception: Exception?) {
         exception?.printStackTrace()
         Toast.makeText(this, resources.getText(R.string.error_toast), Toast.LENGTH_SHORT).show()
     }
@@ -49,13 +48,7 @@ open class BaseActivity : AppCompatActivity() {
     }
 
     fun <T : AppCompatActivity> gotToActivity(activityClass: Class<T>) {
-        startActivity(
-            Intent(
-                this,
-                activityClass
-            )
-        ).also {
-            finish()
-        }
+        startActivity(Intent(this, activityClass))
+            .also { finish() }
     }
 }

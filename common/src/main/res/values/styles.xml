@@ -28,4 +28,23 @@
         <item name="colorAccent">#000</item>
         <item name="android:textColor">#000</item>
     </style>
+
+    <style name="Widget.MaterialComponents.TextInputLayout.OutlinedBox" parent="Base.Widget.MaterialComponents.TextInputLayout">
+        <item name="materialThemeOverlay">
+            @style/ThemeOverlay.MaterialComponents.TextInputEditText.OutlinedBox
+        </item>
+        <item name="boxCollapsedPaddingTop">0dp</item>
+        <item name="iconSize">24dp</item>
+        <item name="checkedIconSize">24dp</item>
+        <item name="itemIconSize">24dp</item>
+        <item name="chipIconSize">24dp</item>
+        <item name="startIconTint">@color/colorPrimary</item>
+    </style>
+
+    <style name="Widget.MaterialComponents.Button.OutlinedButton" parent="Widget.MaterialComponents.Button.TextButton">
+        <item name="android:paddingLeft">@dimen/mtrl_btn_padding_left</item>
+        <item name="android:paddingRight">@dimen/mtrl_btn_padding_right</item>
+        <item name="strokeColor">@color/mtrl_btn_stroke_color_selector</item>
+        <item name="strokeWidth">@dimen/mtrl_btn_stroke_size</item>
+    </style>
 </resources>

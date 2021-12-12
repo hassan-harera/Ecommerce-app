@@ -4,7 +4,7 @@ import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewbinding.ViewBinding
 import com.harera.common.R
-import com.harera.ui_components.loading.LoadingDialog
+import com.harera.common.ui.LoadingDialog
 
 open class BaseViewHolder(val binding: ViewBinding) : RecyclerView.ViewHolder(binding.root) {
 

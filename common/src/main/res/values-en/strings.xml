@@ -1,14 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">" Hyper Panda "</string>
+    <string name="app_name">" Afandena Store "</string>
     <string name="sign_up"> Subscribe </string>
     <string name="shop"> Shop </string>
     <string name="categories"> Categories </string>
     <string name="account"> My Account</string>
-    <string name="wellcome_text"> Hello! \ n Hyper Panda \ n Shopping Fun </string>
+    <string name="wellcome_text"> Welcome back!\n In Afandena store</string>
     <string name="start">start</string>
     <string name="password"> password </string>
     <string name="email">email</string>
+    <string name="product_amount">Product amount</string>
     <string name="best_offers">Best Offers</string>
     <string name="last_offers"> Latest Offers </string>
     <string name="wishlist"> Wishlist </string>
@@ -115,10 +116,10 @@
     <string name="search">search</string>
     <string name="notifications"> Notifications </string>
     <string name="like">Like</string>
-    <string name="search_hyper_panda">Search a hyperpanda</string>
+    <string name="search_hyper_panda">Search in Afandena</string>
     <string name="profile"> Profile </string>
     <string name="our_location"> Our location</string>
-    <string name="available_in_hyper_panda"> Available in hyperpanda </string>
+    <string name="available_in_hyper_panda"> Available in Afandena </string>
     <string name="similar_products"> Similar products: </string>
     <string name="top_categories">Main Sections</string>
     <string name="no_internet"> No internet connection \ n Please check internet </string>
@@ -151,4 +152,13 @@
     <string name="empty_phone_error">phone number not suitable</string>
     <string name="empty_category_name_error">اسم القسم فارغ</string>
     <string name="empty_image_error">ادخل صوره</string>
+    <string name="title_add_product">Add Product</string>
+    <string name="product_price">Product Price</string>
+    <string name="empty_email_error">Email is required</string>
+    <string name="invalid_email_error">Invalid email</string>
+    <string name="empty_password">Password is required</string>
+    <string name="last_name">Last name</string>
+    <string name="offers_group">اسم قائمة العروض</string>
+    <string name="is_required">Is Required</string>
+    <string name="add_offers_group">Add Offers Group</string>
 </resources>

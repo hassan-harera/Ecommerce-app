@@ -21,7 +21,7 @@ class Validity {
             string.matches(Regex("^[a-z]{10,200}\$"))
 
         fun checkPassword(string: String) =
-            string.matches(Regex("^[a-z]{8,25}\$"))
+            string.matches(Regex("^[a-z]{5,25}\$"))
 
         fun checkCategoryName(value: String): Boolean =
             value.matches(Regex("^[a-z]{4,50}\$"))
@@ -30,6 +30,6 @@ class Validity {
             code.matches(Regex("^[0-9]{6}\$"))
 
         fun checkEmail(email: String): Boolean =
-            email.matches(Regex("^[\\w]+@([\\w]+\\.)+[\\w]{2,4}\$"))
+            email.matches(Regex("^[\\w-.]+@([\\w-]+\\.)+[\\w-]{2,4}\$"))
     }
 }
