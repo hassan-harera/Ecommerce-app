@@ -16,4 +16,5 @@ android {
 
 dependencies {
     implementation Libs.kotlin
+    implementation Libs.jodaTime
 }

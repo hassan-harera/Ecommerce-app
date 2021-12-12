@@ -4,7 +4,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.harera.image_slider.databinding.CardViewImageBinding
-import com.harera.model.modelget.Offer
+import com.harera.model.model.Offer
 import com.squareup.picasso.Picasso
 
 class OffersAdapter(

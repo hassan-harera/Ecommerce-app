@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:theme="@style/HyperPanda"
+    tools:context=".AddOffersGroupFragment">
+
+    <LinearLayout
+        android:id="@+id/constraintLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/textInputLayoutCategoryName"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/_10sdp"
+            android:hint="@string/offers_group"
+            app:startIconDrawable="@drawable/offers_group_24">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/offer_group_name"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:imeActionId="@integer/btm_to"
+                android:inputType="text"
+                android:lines="1"
+                android:maxEms="50"
+                android:textColor="@color/black" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <ImageView
+            android:id="@+id/image"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_220sdp"
+            android:layout_margin="@dimen/_10sdp"
+            android:contentDescription="@string/image"
+            android:src="@drawable/add_image"/>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/add"
+            style="@style/Widget.MaterialComponents.Button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/_10sdp"
+            android:enabled="false"
+            android:text="@string/add"/>
+    </LinearLayout>
+</ScrollView>

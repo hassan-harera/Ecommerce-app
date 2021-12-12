@@ -1,14 +1,13 @@
 package com.harera.repository.abstraction
 
-import com.google.android.gms.tasks.Task
-import com.google.firebase.firestore.QuerySnapshot
-import com.harera.model.modelset.WishListItem
+import com.harera.model.model.WishItem
 
 interface WishListRepository {
 
-    fun addWishListItem(wishListItem: WishListItem): Task<Void>
-    fun removeWishListItem(productId: String, uid: String): Task<Void>
-    fun getWishListItems(uid: String): Task<QuerySnapshot>
-    fun updateItemUid(itemId: String, uid: String): Task<Void>
-    fun getWishItem(productId: String, uid: String): Task<QuerySnapshot>
+    suspend fun addWishListItem(wishListItem: WishItem): Result<Boolean>
+    suspend fun removeWishListItem(wishItemId: String): Result<Boolean>
+    suspend fun getUserWishItems(uid: String, forceRefresh: Boolean = true): Result<List<WishItem>>
+    suspend fun updateItemUid(wishItemId: String, uid: String): Result<Boolean>
+    suspend fun checkWishItem(productId: String, uid: String): Result<Boolean>
+    suspend fun getWishItem(productId: String, uid: String): Result<WishItem?>
 }

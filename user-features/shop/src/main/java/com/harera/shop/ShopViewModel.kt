@@ -2,19 +2,16 @@ package com.harera.shop
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.viewModelScope
-import com.google.android.gms.tasks.Tasks
 import com.harera.common.base.BaseViewModel
-import com.harera.hyperpanda.local.MarketDao
-import com.harera.model.modelget.Category
-import com.harera.model.modelget.Offer
-import com.harera.model.modelget.Product
+import com.harera.common.local.UserDataStore
+import com.harera.ecommerce.local.LocalDataSource
+import com.harera.model.model.Category
+import com.harera.model.model.Offer
+import com.harera.model.model.Product
 import com.harera.repository.abstraction.CategoryRepository
 import com.harera.repository.abstraction.OfferRepository
 import com.harera.repository.abstraction.ProductRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
@@ -22,8 +19,9 @@ class ShopViewModel @Inject constructor(
     private val offerRepository: OfferRepository,
     private val productRepository: ProductRepository,
     private val categoryRepository: CategoryRepository,
-    private val marketDao: MarketDao,
-) : BaseViewModel() {
+    private val marketDao: LocalDataSource,
+    userDataStore: UserDataStore
+) : BaseViewModel(userDataStore) {
 
     private val page = MutableLiveData(1)
     private val PAGE_SIZE = 20
@@ -37,46 +35,41 @@ class ShopViewModel @Inject constructor(
     private val _offers: MutableLiveData<List<Offer>> = MutableLiveData(emptyList())
     val offers: LiveData<List<Offer>> = _offers
 
+    private val _offersGroup: MutableLiveData<String> = MutableLiveData("")
+    val offersGroup: LiveData<String> = _offersGroup
 
-    fun getCategories() {
+
+    suspend fun getCategories() {
         updateLoading(true)
-        viewModelScope.launch(Dispatchers.IO) {
-            categoryRepository
-                .getCategories(true)
-                .onSuccess { categories ->
-                    updateLoading(false)
-                    updateCategories(categories)
-                    saveInDatabase(categories)
-                }
-                .onFailure {
-                    updateException(it)
-                }
-        }
+        categoryRepository
+            .getCategories(true)
+            .onSuccess { categories ->
+                updateLoading(false)
+                updateCategories(categories)
+                saveInDatabase(categories)
+            }
+            .onFailure {
+                handleException(it)
+            }
     }
 
     private fun saveInDatabase(categories: List<Category>) {
         marketDao.insertCategory(categories)
     }
 
-    fun getProducts() {
+    suspend fun getProducts() {
         updateLoading(true)
-        viewModelScope.launch(Dispatchers.IO) {
-            val task = productRepository.getProducts(page.value!! * PAGE_SIZE)
-            val result = Tasks.await(task)
-
-            updateLoading(false)
-
-            if (task.isSuccessful) {
-                result.documents.map {
-                    it.toObject(Product::class.java)!!
-                }.let {
-                    updateProducts(it)
-                    cacheProducts(it)
-                }
-            } else {
-                updateException(task.exception)
+        productRepository
+            .getProducts(page.value!! * PAGE_SIZE)
+            .onSuccess {
+                updateLoading(false)
+                updateProducts(it)
+                cacheProducts(it)
             }
-        }
+            .onFailure {
+                updateLoading(false)
+                handleException(it)
+            }
     }
 
     private fun cacheProducts(list: List<Product>) {
@@ -85,24 +78,17 @@ class ShopViewModel @Inject constructor(
         }
     }
 
-    fun getOffers() {
+    suspend fun getOffers() {
         updateLoading(true)
-        viewModelScope.launch(Dispatchers.IO) {
-            val task = offerRepository.getOffers()
-            val result = Tasks.await(task)
-
-            updateLoading(false)
-
-            if (task.isSuccessful) {
-                result.documents.map {
-                    it.toObject(Offer::class.java)!!
-                }.let {
-                    updateOffers(it)
-                }
-            } else {
-                updateException(task.exception)
+        offerRepository
+            .getOffers(offersGroup = offersGroup.value!!)
+            .onSuccess {
+                updateLoading(false)
+                updateOffers(it)
             }
-        }
+            .onFailure {
+                handleException(it)
+            }
     }
 
     private fun updateProducts(products: List<Product>) {
@@ -113,7 +99,7 @@ class ShopViewModel @Inject constructor(
         _categories.postValue(categories)
     }
 
-    fun nextPage() {
+    suspend fun nextPage() {
         page.postValue(page.value!! + 1)
         getProducts()
     }

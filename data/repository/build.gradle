@@ -9,13 +9,6 @@ dependencies {
     implementation Libs.playServicesMaps
     implementation Libs.playServicesTasks
 
-    //firebase
-    api Libs.firebaseAuth
-    api Libs.firebaseDatabase
-    implementation platform(Libs.firebaseBom)
-    api Libs.firebaseFirestore
-    api Libs.firebaseStorage
-
     //hilt
     kapt(Libs.hiltAndroidCompiler)
     implementation(Libs.hiltAndroid)
@@ -30,4 +23,6 @@ dependencies {
     api project(Data.local)
     api project(Data.firebase)
     api project(Data.api)
+
+    implementation project(UiComponents.common)
 }

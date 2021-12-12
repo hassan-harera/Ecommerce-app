@@ -5,7 +5,7 @@ dependencies {
     implementation project(UiComponents.categoryName)
     implementation project(UiComponents.product)
 
-    implementation project(Data.repository)
+    api project(Data.repository)
 
     implementation Libs.picasso
     implementation Libs.liveData

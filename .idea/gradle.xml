@@ -20,12 +20,11 @@
             <option value="$PROJECT_DIR$/data/remote/firebase" />
             <option value="$PROJECT_DIR$/data/repository" />
             <option value="$PROJECT_DIR$/features" />
-            <option value="$PROJECT_DIR$/features/add-category" />
-            <option value="$PROJECT_DIR$/features/product" />
-            <option value="$PROJECT_DIR$/features/shop" />
             <option value="$PROJECT_DIR$/manager" />
             <option value="$PROJECT_DIR$/manager-features" />
             <option value="$PROJECT_DIR$/manager-features/add-category" />
+            <option value="$PROJECT_DIR$/manager-features/add-offers-group" />
+            <option value="$PROJECT_DIR$/manager-features/add-product" />
             <option value="$PROJECT_DIR$/manager-features/categories" />
             <option value="$PROJECT_DIR$/manager-features/dashboard" />
             <option value="$PROJECT_DIR$/manager-features/edit-product" />
@@ -39,7 +38,6 @@
             <option value="$PROJECT_DIR$/ui-components/category-image" />
             <option value="$PROJECT_DIR$/ui-components/category-name" />
             <option value="$PROJECT_DIR$/ui-components/image-card" />
-            <option value="$PROJECT_DIR$/ui-components/loading" />
             <option value="$PROJECT_DIR$/ui-components/product" />
             <option value="$PROJECT_DIR$/ui-components/user-locator" />
             <option value="$PROJECT_DIR$/ui-components/wish-item" />

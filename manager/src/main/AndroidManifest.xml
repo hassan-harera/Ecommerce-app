@@ -22,11 +22,11 @@
 
         <activity
             android:name="com.harera.manager.login.LoginActivity"
-            android:exported="false" />
+            android:exported="true" />
 
         <activity
             android:name="com.harera.manager_navigation.HomeActivity"
-            android:exported="false">
+            android:exported="true">
             <nav-graph android:value="@navigation/mobile_navigation" />
         </activity>
 

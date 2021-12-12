@@ -1,16 +1,18 @@
 package com.harera.product
 
-import androidx.lifecycle.*
-import com.google.firebase.Timestamp
-import com.harera.abstraction.*
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import com.harera.common.base.BaseViewModel
+import com.harera.common.local.UserDataStore
 import com.harera.model.model.CartItem
 import com.harera.model.model.Product
 import com.harera.model.model.WishItem
-import com.harera.repository.abstraction.*
+import com.harera.repository.abstraction.CartRepository
+import com.harera.repository.abstraction.CategoryRepository
+import com.harera.repository.abstraction.ProductRepository
+import com.harera.repository.abstraction.WishListRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
+import org.joda.time.DateTime
 import javax.inject.Inject
 
 @HiltViewModel
@@ -19,10 +21,11 @@ class ProductViewModel @Inject constructor(
     private val cartRepository: CartRepository,
     private val wishListRepository: WishListRepository,
     private val categoryRepository: CategoryRepository,
-    private val authManager: UserRepository,
-) : BaseViewModel() {
+    userDataStore: UserDataStore,
+) : BaseViewModel(userDataStore) {
 
     private val _productId = MutableLiveData<String>()
+    val productId: LiveData<String> = _productId
 
     private val _wishState = MutableLiveData<Boolean>()
     val wishState: LiveData<Boolean> = _wishState
@@ -30,24 +33,26 @@ class ProductViewModel @Inject constructor(
     private val _cartState = MutableLiveData<Boolean>()
     val cartState: LiveData<Boolean> = _cartState
 
-    private val _products: MutableLiveData<List<Product>> = MutableLiveData()
-    val products: LiveData<List<Product>> = _products
+    private val _wishItem = MutableLiveData<WishItem>()
+    val wishItem: LiveData<WishItem> = _wishItem
+
+    private val _cartItem = MutableLiveData<CartItem>()
+    val cartItem: LiveData<CartItem> = _cartItem
 
     private val _product: MutableLiveData<Product> = MutableLiveData()
     val product: LiveData<Product> = _product
 
-    suspend fun getProduct() {
-        updateLoading(true)
+    private val _products: MutableLiveData<List<Product>> = MutableLiveData()
+    val products: LiveData<List<Product>> = _products
 
+    suspend fun getProduct() {
         productRepository
             .getProduct(_productId.value!!)
             .onSuccess {
-                updateLoading(false)
                 _product.postValue(it)
-                getCategoryProducts(it.categoryName)
+                getRelatedProducts()
             }
             .onFailure {
-                updateLoading(false)
                 handleException(it)
             }
     }
@@ -56,27 +61,81 @@ class ProductViewModel @Inject constructor(
         _productId.value = productId
     }
 
-    fun getCartState() = viewModelScope.launch(Dispatchers.IO) {
+    suspend fun getCartState() {
         cartRepository
-            .checkCart(_productId.value!!, authManager.getCurrentUser()!!.uid)
+            .getCartItem(product.value!!.productId, uid)
             .onSuccess {
-                updateCartState(it)
+                updateCartState(it != null)
+                _cartItem.postValue(it)
             }
             .onFailure {
                 handleException(it)
             }
     }
 
-    private fun updateCartState(state: Boolean) = viewModelScope.launch(Dispatchers.Main) {
+    private fun updateCartState(state: Boolean) {
         _cartState.value = state
     }
 
-    fun getWishState() = viewModelScope.launch(Dispatchers.IO) {
+    suspend fun getWishState() {
         wishListRepository
-            .checkWishItem(
-                _productId.value!!,
-                authManager.getCurrentUser()!!.uid
+            .getWishItem(
+                product.value!!.productId,
+                uid
             )
+            .onSuccess {
+                updateWishState(it != null)
+                _wishItem.postValue(it)
+            }
+            .onFailure { throwable ->
+                handleException(throwable)
+            }
+    }
+
+    private fun updateWishState(state: Boolean) {
+        _wishState.postValue(state)
+    }
+
+    suspend fun changeCartState() {
+        if (cartState.value!!) {
+            removeCartItem(cartItem.value!!.cartItemId)
+        } else {
+            addCartItem()
+        }
+    }
+
+    suspend fun changeWishState() {
+        if (wishState.value!!) {
+            removeWishItem(wishItem.value!!.wishItemId)
+        } else {
+            addWishItem()
+        }
+    }
+
+    private suspend fun removeWishItem(wishItemId: String) {
+        wishListRepository
+            .removeWishListItem(wishItemId)
+            .onSuccess {
+                updateWishState(it)
+            }.onFailure {
+                handleException(it)
+            }
+    }
+
+    private suspend fun addWishItem() {
+        val product = product.value!!
+
+        val item = WishItem(
+            productId = product.productId,
+            uid = uid,
+            time = DateTime.now().toString(),
+            productPrice = product.price,
+            productImageUrl = product.productPictureUrls.first(),
+            productTitle = product.title,
+        )
+
+        wishListRepository
+            .addWishListItem(item)
             .onSuccess {
                 updateWishState(it)
             }
@@ -85,64 +144,17 @@ class ProductViewModel @Inject constructor(
             }
     }
 
-    private fun updateWishState(state: Boolean) = viewModelScope.launch(Dispatchers.Main) {
-        _wishState.value = state
-    }
+    private suspend fun addCartItem() {
+        val product = product.value!!
 
-    fun changeCartState() = viewModelScope.launch(Dispatchers.IO) {
-        this@ProductViewModel.getCartState().join()
-
-        if (cartState.value!!) {
-            removeCartItem()
-        } else {
-            addCartItem()
-        }
-    }
-
-    fun changeWishState() = viewModelScope.launch(Dispatchers.IO) {
-        this@ProductViewModel.getWishState().join()
-
-        if (wishState.value!!) {
-            removeWishItem()
-        } else {
-            addWishItem()
-        }
-    }
-
-    private fun removeWishItem() = viewModelScope.launch(Dispatchers.IO) {
-        wishListRepository.removeWishListItem(
-            _productId.value!!,
-            authManager.getCurrentUser()!!.uid
-        ).onSuccess {
-            updateWishState(false)
-        }.onFailure {
-            handleException(it)
-        }
-    }
-
-    private fun addWishItem() = viewModelScope.launch(Dispatchers.IO) {
-        val item = WishItem(
-            _productId.value!!,
-            authManager.getCurrentUser()!!.uid,
-            Timestamp.now()
-        )
-
-        wishListRepository
-            .addWishListItem(item)
-            .onSuccess {
-                updateWishState(true)
-            }
-            .onFailure {
-                handleException(it)
-            }
-    }
-
-    private fun addCartItem() = viewModelScope.launch(Dispatchers.IO) {
         val item = CartItem(
-            _productId.value!!,
-            authManager.getCurrentUser()!!.uid,
-            1,
-            Timestamp.now(),
+            productId = product.productId,
+            uid = uid,
+            quantity = 1,
+            time = DateTime.now().toString(),
+            productTitle = product.title,
+            productImageUrl = product.productPictureUrls.first(),
+            productPrice = product.price,
         )
 
         cartRepository
@@ -155,20 +167,20 @@ class ProductViewModel @Inject constructor(
             }
     }
 
-    private fun removeCartItem() = viewModelScope.launch(Dispatchers.IO) {
+    private suspend fun removeCartItem(cartItemId: String) {
         cartRepository
-            .removeCartItem(_productId.value!!, authManager.getCurrentUser()!!.uid)
+            .removeCartItem(cartItemId)
             .onSuccess {
-                updateCartState(false)
+                updateCartState(it)
             }
             .onFailure {
                 handleException(it)
             }
     }
 
-    fun getCategoryProducts(category: String) {
+    suspend fun getRelatedProducts() {
         categoryRepository
-            .getCategoryProducts(category)
+            .getCategoryProducts(product.value!!.categoryName)
             .onSuccess {
                 _products.postValue(it)
             }

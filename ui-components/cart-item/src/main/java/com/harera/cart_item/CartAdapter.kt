@@ -4,11 +4,10 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.harera.cart_item.databinding.CardViewCartItemBinding
-import com.harera.model.modelget.CartItem
+import com.harera.model.model.CartItem
 import com.squareup.picasso.Picasso
-import javax.inject.Inject
 
-class CartAdapter @Inject constructor(
+class CartAdapter constructor(
     private var list: List<CartItem> = ArrayList(),
     private val onRemoveItemClicked: (String) -> Unit,
     private val onItemClicked: (String) -> Unit,

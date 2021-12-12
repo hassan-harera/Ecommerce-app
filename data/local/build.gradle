@@ -1,5 +1,6 @@
-apply from:"$rootDir/android-library.gradle"
+apply from: "$rootDir/android-library.gradle"
 apply plugin: ("dagger.hilt.android.plugin")
+apply plugin: 'com.squareup.sqldelight'
 
 dependencies {
     api project(Data.model)
@@ -21,4 +22,11 @@ dependencies {
     androidTestImplementation(Libs.hiltTesting)
     androidTestImplementation(Libs.testRunner)
     kaptAndroidTest(Libs.hiltAndroidCompiler)
+
+    api(Room.sqlDelight)
+}
+sqldelight {
+    LocalDatabase {
+        packageName = "com.harera.hyperpanda.local"
+    }
 }

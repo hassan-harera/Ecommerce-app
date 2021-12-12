@@ -45,14 +45,30 @@ dependencies {
     implementation Libs.kotlin
     testImplementation Libs.junit4
 
-    implementation project(Data.repository)
+    api project(Data.repository)
 
     implementation project(UiComponents.common)
 
     implementation(Libs.coroutinesCore)
     implementation(Compose.composeLivedata)
 
-    //hilt
-    implementation Libs.hiltAndroid
+
+    implementation Libs.picasso
+    implementation Libs.liveData
+
     kapt(Libs.hiltAndroidCompiler)
+
+    //hilt
+    api project(Data.repository)
+    implementation(Libs.hiltAndroid)
+    implementation Libs.playServicesTasks
+
+    implementation Libs.gligarPicker
+    implementation Libs.androidxCore
+    implementation Libs.kotlin
+    implementation Libs.appcompat
+
+    implementation Libs.navigationFragment
+    implementation Libs.materialDesign
+    implementation Libs.searchBar
 }

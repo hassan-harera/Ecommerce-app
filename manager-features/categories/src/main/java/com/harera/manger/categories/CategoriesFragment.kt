@@ -6,19 +6,20 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.harera.categories.CategoriesAdapter
 import com.harera.common.base.BaseFragment
-import com.harera.common.network.ConnectionLiveData
 import com.harera.common.utils.navigation.Arguments
 import com.harera.common.utils.navigation.Destinations
 import com.harera.common.utils.navigation.NavigationUtils
 import com.harera.components.product.ProductsAdapter
-import com.harera.model.modelget.Category
-import com.harera.model.modelget.Product
 import com.harera.manger.categories.databinding.FragmentCategoriesBinding
+import com.harera.model.model.Category
+import com.harera.model.model.Product
+import kotlinx.coroutines.launch
 
 class CategoriesFragment : BaseFragment() {
 
@@ -79,17 +80,15 @@ class CategoriesFragment : BaseFragment() {
 
         setupObservers()
 
-        categoriesViewModel.getCategories()
-        categoriesViewModel.getProducts()
+        lifecycleScope.launch {
+            categoriesViewModel.getCategories()
+            categoriesViewModel.getProducts()
+        }
     }
 
     private fun setupObservers() {
         categoriesViewModel.categories.observe(viewLifecycleOwner) {
             updateCategoriesView(categories = it)
-        }
-
-        ConnectionLiveData(requireContext()).observe(viewLifecycleOwner) {
-            categoriesViewModel.setConnectionState(it)
         }
 
         categoriesViewModel.products.observe(viewLifecycleOwner) {
@@ -105,7 +104,17 @@ class CategoriesFragment : BaseFragment() {
         }
 
         categoriesViewModel.categoryName.observe(viewLifecycleOwner) {
-            categoriesViewModel.getProducts()
+            lifecycleScope.launch {
+                categoriesViewModel.getProducts()
+            }
+        }
+
+        connectionLiveData.observe(viewLifecycleOwner) {
+            categoriesViewModel.updateConnectivity(it)
+        }
+
+        connectionLiveData.observe(viewLifecycleOwner) {
+            categoriesViewModel.updateConnectivity(it)
         }
     }
 

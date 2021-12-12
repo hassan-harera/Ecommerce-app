@@ -21,6 +21,26 @@
     </fragment>
 
     <fragment
+        android:id="@+id/navigation_add_product"
+        android:name="com.harera.add_product.AddProductFragment"
+        android:label="@string/title_add_product"
+        tools:layout="@layout/fragment_add_product">
+
+<!--        <argument android:name="categoryId" />-->
+<!--        <deepLink app:uri="HyperPandaManager://add_product/{categoryId}" />-->
+    </fragment>
+
+    <fragment
+        android:id="@+id/navigation_add_offers_group"
+        android:name="com.harera.add_offers_group.AddOffersGroupFragment"
+        android:label="@string/add_offers_group"
+        tools:layout="@layout/fragment_add_offers_group">
+
+<!--        <argument android:name="categoryId" />-->
+<!--        <deepLink app:uri="HyperPandaManager://add_offers_group/{categoryId}" />-->
+    </fragment>
+
+    <fragment
         android:id="@+id/navigation_categories"
         android:name="com.harera.manger.categories.CategoriesFragment"
         android:label="Categories"

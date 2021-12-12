@@ -2,10 +2,12 @@ package com.harera.categories
 
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -15,8 +17,10 @@ import com.harera.common.utils.navigation.Arguments
 import com.harera.common.utils.navigation.Destinations
 import com.harera.common.utils.navigation.NavigationUtils
 import com.harera.components.product.ProductsAdapter
-import com.harera.model.modelget.Category
-import com.harera.model.modelget.Product
+import com.harera.model.model.Category
+import com.harera.model.model.Product
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class CategoriesFragment : BaseFragment() {
     private val categoriesViewModel: CategoriesViewModel by viewModels()
@@ -24,6 +28,7 @@ class CategoriesFragment : BaseFragment() {
     private lateinit var productsAdapter: ProductsAdapter
     private lateinit var bind: FragmentCategoriesBinding
 
+    private val TAG = "CategoriesFragment"
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -70,13 +75,16 @@ class CategoriesFragment : BaseFragment() {
 
         setupObservers()
 
-        categoriesViewModel.getCategories()
-        categoriesViewModel.getProducts()
+        lifecycleScope.launch(Dispatchers.IO) {
+            categoriesViewModel.getCategories()
+            categoriesViewModel.getProducts()
+        }
     }
 
     private fun setupObservers() {
         categoriesViewModel.categories.observe(viewLifecycleOwner) {
             updateCategoriesView(categories = it)
+            Log.d(TAG, "setupObservers: ${it.size}")
         }
 
         categoriesViewModel.products.observe(viewLifecycleOwner) {
@@ -92,7 +100,13 @@ class CategoriesFragment : BaseFragment() {
         }
 
         categoriesViewModel.categoryName.observe(viewLifecycleOwner) {
-            categoriesViewModel.getProducts()
+            lifecycleScope.launch(Dispatchers.IO) {
+                categoriesViewModel.getProducts()
+            }
+        }
+
+        connectionLiveData.observe(viewLifecycleOwner) {
+            categoriesViewModel.updateConnectivity(it)
         }
     }
 

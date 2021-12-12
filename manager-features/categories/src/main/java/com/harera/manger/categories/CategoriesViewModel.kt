@@ -4,26 +4,27 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.liveData
 import androidx.lifecycle.viewModelScope
-import com.google.android.gms.tasks.Tasks
 import com.harera.common.base.BaseViewModel
+import com.harera.common.local.UserDataStore
 import com.harera.common.utils.Response
-import com.harera.hyperpanda.local.MarketDao
-import com.harera.model.modelget.Category
-import com.harera.model.modelget.Product
-import com.harera.repository.abstraction.repository.CategoryRepository
-import com.harera.repository.abstraction.repository.ProductRepository
+import com.harera.ecommerce.local.LocalDataSource
+import com.harera.model.model.Category
+import com.harera.model.model.Product
+import com.harera.repository.abstraction.CategoryRepository
+import com.harera.repository.abstraction.ProductRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import javax.inject.Inject
-import com.harera.model.modelset.Category as CategorySet
+import com.harera.model.model.Category as CategorySet
 
 @HiltViewModel
 class CategoriesViewModel @Inject constructor(
-    private val categoryRepository: com.harera.repository.abstraction.repository.CategoryRepository,
-    private val productRepository: com.harera.repository.abstraction.repository.ProductRepository,
-    private val marketDao: MarketDao,
-) : BaseViewModel() {
+    private val categoryRepository: CategoryRepository,
+    private val productRepository: ProductRepository,
+    private val marketDao: LocalDataSource,
+    userDataStore: UserDataStore
+) : BaseViewModel(userDataStore) {
 
     private val _categories: MutableLiveData<List<Category>> = MutableLiveData()
     val categories: LiveData<List<Category>> = _categories
@@ -34,38 +35,32 @@ class CategoriesViewModel @Inject constructor(
     private val _categoryName = MutableLiveData<String?>(null)
     val categoryName: LiveData<String?> = _categoryName
 
-    private val _isConnected = MutableLiveData<Boolean>(false)
-    val isConnected: LiveData<Boolean> = _isConnected
-
-    fun getCategories() {
+    suspend fun getCategories() {
         updateLoading(true)
-        categoryRepository.getCategories(isConnected.value!!)
+        categoryRepository
+            .getCategories(true)
             .onSuccess {
                 updateLoading(false)
                 updateCategories(it)
             }
             .onFailure {
                 updateLoading(false)
-                updateException(it)
+                handleException(it)
             }
     }
 
     fun addCategory(category: CategorySet) = liveData {
         categoryRepository
             .addCategory(category)
-            .addOnSuccessListener {
-                viewModelScope.launch(Dispatchers.Main) {
-                    emit(Response.success(data = null))
-                }
-            }.addOnFailureListener {
-                it.printStackTrace()
+            .onSuccess {
+                emit(Response.success(data = null))
+            }.onFailure {
+                handleException(it)
             }
     }
 
     private fun updateProducts(products: List<Product>) {
-        viewModelScope.launch(Dispatchers.Main) {
-            _products.value = products
-        }
+        _products.postValue(products)
     }
 
     private fun updateCategories(categories: List<Category>) {
@@ -78,46 +73,35 @@ class CategoriesViewModel @Inject constructor(
         _categoryName.value = category
     }
 
-    fun getProducts() {
+    suspend fun getProducts() {
         if (_categoryName.value != null)
             getCategoryProducts(_categoryName.value!!)
         else
             getAllProducts()
     }
 
-    private fun getCategoryProducts(category: String) {
+    private suspend fun getCategoryProducts(category: String) {
         categoryRepository
             .getCategoryProducts(category)
-            .addOnSuccessListener {
-                it.documents.map {
-                    it.toObject(Product::class.java)!!
-                }.let {
-                    _products.value = it
-                }
-            }.addOnFailureListener {
-                updateException(it)
+            .onSuccess {
+                _products.postValue(it)
+            }
+            .onFailure {
+                handleException(it)
             }
     }
 
-    private fun getAllProducts() {
+    private suspend fun getAllProducts() {
         updateLoading(true)
-        viewModelScope.launch(Dispatchers.IO) {
-            val task = productRepository.getProducts(20)
-            val result = Tasks.await(task)
-
-            updateLoading(false)
-
-            if (task.isSuccessful) {
-                result.documents.map {
-                    it.toObject(Product::class.java)!!
-                }.let {
-                    updateProducts(it)
-                    cacheProducts(it)
-                }
-            } else {
-                updateException(task.exception)
+        productRepository
+            .getProducts(20)
+            .onSuccess {
+                updateProducts(it)
+                cacheProducts(it)
             }
-        }
+            .onFailure {
+                handleException(it)
+            }
     }
 
     private fun cacheProducts(list: List<Product>) {
@@ -125,9 +109,4 @@ class CategoriesViewModel @Inject constructor(
             marketDao.insertProducts(list)
         }
     }
-
-    fun setConnectionState(state: Boolean) {
-        _isConnected.postValue(state)
-    }
-
 }

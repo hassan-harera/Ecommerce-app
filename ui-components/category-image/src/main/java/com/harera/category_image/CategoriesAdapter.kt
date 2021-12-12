@@ -5,7 +5,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.harera.category_image.databinding.CardViewShopCategoryBinding
-import com.harera.model.modelget.Category
+import com.harera.model.model.Category
 import com.squareup.picasso.Picasso
 
 class CategoriesAdapter(

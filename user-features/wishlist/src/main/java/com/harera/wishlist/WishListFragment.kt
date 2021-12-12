@@ -6,16 +6,19 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
 import com.harera.common.base.BaseFragment
 import com.harera.common.utils.navigation.Arguments
 import com.harera.common.utils.navigation.Destinations
 import com.harera.common.utils.navigation.NavigationUtils
-import com.harera.model.modelget.WishItem
+import com.harera.model.model.WishItem
 import com.harera.wish_item.WishListAdapter
 import com.harera.wishlist.databinding.FragmentWishlistBinding
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class WishListFragment : BaseFragment() {
@@ -26,7 +29,7 @@ class WishListFragment : BaseFragment() {
 
     override fun onCreateView(
         inflater: LayoutInflater,
-        container: ViewGroup?, savedInstanceState: Bundle?
+        container: ViewGroup?, savedInstanceState: Bundle?,
     ): View {
         bind = FragmentWishlistBinding.inflate(inflater, container, false)
 
@@ -38,10 +41,11 @@ class WishListFragment : BaseFragment() {
                 viewProduct(productId)
             },
             onRemoveItemClicked = {
-                wishListViewModel.removeWishItem(it)
+                lifecycleScope.launch(Dispatchers.IO) {
+                    wishListViewModel.removeWishItem(it)
+                }
             },
-
-            )
+        )
         return bind.root
     }
 
@@ -62,10 +66,12 @@ class WishListFragment : BaseFragment() {
         setupAdapter()
         setupListeners()
 
-        wishListViewModel.wishList.observe(viewLifecycleOwner) { map ->
-            updateWishList(map.map {
-                it.value
-            })
+        lifecycleScope.launch(Dispatchers.IO) {
+            wishListViewModel.getWishListItems()
+        }
+
+        wishListViewModel.wishList.observe(viewLifecycleOwner) {
+            updateWishList(it)
         }
 
         wishListViewModel.loading.observe(viewLifecycleOwner) {
@@ -76,7 +82,10 @@ class WishListFragment : BaseFragment() {
             handleError(it)
         }
 
-        wishListViewModel.getWishListItems()
+
+        connectionLiveData.observe(viewLifecycleOwner) {
+            wishListViewModel.updateConnectivity(it)
+        }
     }
 
     private fun setupListeners() {

@@ -7,14 +7,15 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.activity.viewModels
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
+import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.viewModelScope
 import com.harera.common.base.BaseActivity
+import com.harera.common.base.BaseViewModel
 import com.harera.common.internet.NoInternetActivity
+import com.harera.common.local.UserDataStore
 import com.harera.manager.login.LoginActivity
 import com.harera.manager_navigation.HomeActivity
-import com.harera.repository.abstraction.repository.AuthManager
-import com.harera.repository.abstraction.repository.UserRepository
+import com.harera.repository.abstraction.UserRepository
 import dagger.hilt.android.AndroidEntryPoint
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.*
@@ -29,7 +30,9 @@ class MainActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        mainViewModel.checkLogin()
+        lifecycleScope.launch(Dispatchers.IO) {
+            mainViewModel.checkLogin()
+        }
         setupAnimation()
         waitDelay()
     }
@@ -70,14 +73,15 @@ class MainActivity : BaseActivity() {
 
 @HiltViewModel
 class MainViewModel @Inject constructor(
-    private val authManager: com.harera.repository.abstraction.repository.AuthManager,
-    private val userRepo: com.harera.repository.abstraction.repository.UserRepository
-) : ViewModel() {
+    private val authManager: UserRepository,
+    private val userRepo: UserRepository,
+    userDataStore: UserDataStore,
+) : BaseViewModel(userDataStore) {
 
     val delayEnded: MutableLiveData<Boolean> = MutableLiveData(false)
     val isLoggedIn: MutableLiveData<Boolean> = MutableLiveData(false)
 
-    fun checkLogin() {
+    suspend fun checkLogin() {
         isLoggedIn.value = authManager.getCurrentUser() != null
     }
 

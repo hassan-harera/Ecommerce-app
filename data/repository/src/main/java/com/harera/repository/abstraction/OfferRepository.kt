@@ -1,17 +1,16 @@
 package com.harera.repository.abstraction
 
-import com.google.android.gms.tasks.Task
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.firestore.DocumentSnapshot
-import com.google.firebase.firestore.QuerySnapshot
-import com.harera.model.modelset.Offer
+import android.graphics.Bitmap
+import com.harera.model.model.Offer
+import com.harera.model.model.OffersGroup
 
 interface OfferRepository {
 
-    fun getOfferById(offerId: String): Task<DocumentSnapshot>
-    fun getOfferTypes(): Task<DataSnapshot>
-    fun addOfferType(offerType: String): Task<Void>
-    fun getOffers(offerType: String): Task<QuerySnapshot>
-    fun addOffer(offer: Offer): Task<Void>
-    fun getOffers(): Task<QuerySnapshot>
+    suspend fun getOffer(offerId: String): Result<Offer>
+    suspend fun getOfferTypes(): Result<List<OffersGroup>>
+    suspend fun addOfferType(offersGroup: OffersGroup): Result<Boolean>
+    suspend fun getOffers(offersGroup: String): Result<List<Offer>>
+    suspend fun addOffer(offer: Offer): Result<Boolean>
+    suspend fun uploadOffersGroupImage(offersGroupName: String, imageBitmap: Bitmap): Result<String>
+    suspend fun setOffersGroup(offersGroup: OffersGroup): Result<Boolean>
 }

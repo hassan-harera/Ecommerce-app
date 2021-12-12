@@ -3,7 +3,7 @@ package com.harera.offer
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.harera.model.modelget.Offer
+import com.harera.model.model.Offer
 import com.harera.offer.databinding.CardViewOfferBinding
 import com.squareup.picasso.Picasso
 

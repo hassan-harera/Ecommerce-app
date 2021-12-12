@@ -23,7 +23,6 @@ import com.opensooq.supernova.gligar.GligarPicker
 import java.io.IOException
 import java.util.*
 
-
 class CustomerFormFragment : BaseFragment() {
     companion object {
         private val CHOOSE_LOCATION_CODE: Int = 3005
@@ -62,20 +61,22 @@ class CustomerFormFragment : BaseFragment() {
     }
 
     private fun setupObservers() {
-        customerFormViewModel.image.observe(viewLifecycleOwner) {
-            bind.image!!.setImageBitmap(it)
-        }
+        customerFormViewModel.apply {
+            image.observe(viewLifecycleOwner) {
+                bind.image.setImageBitmap(it)
+            }
 
-        customerFormViewModel.firstName.observe(viewLifecycleOwner) {
-            bind.firstName.setText(it)
-        }
+            firstName.observe(viewLifecycleOwner) {
+                bind.firstName.setText(it)
+            }
 
-        customerFormViewModel.lastName.observe(viewLifecycleOwner) {
-            bind.lastName!!.setText(it)
-        }
+            lastName.observe(viewLifecycleOwner) {
+                bind.lastName.setText(it)
+            }
 
-        customerFormViewModel.location.observe(viewLifecycleOwner) {
-            updateLocation(it)
+            location.observe(viewLifecycleOwner) {
+                updateLocation(it)
+            }
         }
 
         customerFormViewModel.user.observe(viewLifecycleOwner) {
@@ -86,7 +87,7 @@ class CustomerFormFragment : BaseFragment() {
             handleLoading(state = it)
         }
 
-        customerFormViewModel.error.observe(viewLifecycleOwner) {
+        customerFormViewModel.exception.observe(viewLifecycleOwner) {
             handleError(exception = it)
         }
 

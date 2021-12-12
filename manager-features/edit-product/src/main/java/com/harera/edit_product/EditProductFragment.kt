@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import com.harera.common.base.BaseFragment
 import com.harera.common.utils.BitmapUtils
 import com.harera.common.utils.navigation.Arguments.PRODUCT_ID
@@ -14,6 +15,8 @@ import com.harera.edit_product.databinding.FragmentEditProductBinding
 import com.harera.model.model.Product
 import com.opensooq.supernova.gligar.GligarPicker
 import com.squareup.picasso.Picasso
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 
 class EditProductFragment : BaseFragment() {
@@ -54,11 +57,15 @@ class EditProductFragment : BaseFragment() {
         }
 
         editProductViewModel.productId.observe(viewLifecycleOwner) {
-            editProductViewModel.getProduct()
+            lifecycleScope.launch(Dispatchers.IO) {
+                editProductViewModel.getProduct()
+            }
         }
 
         editProductViewModel.operationCompleted.observe(viewLifecycleOwner) {
-            editProductViewModel.getProduct()
+            lifecycleScope.launch(Dispatchers.IO) {
+                editProductViewModel.getProduct()
+            }
         }
 
         editProductViewModel.product.observe(viewLifecycleOwner) {

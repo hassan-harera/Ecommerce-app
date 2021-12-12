@@ -23,13 +23,17 @@ class MarketLocation : FragmentActivity(), OnMapReadyCallback {
     override fun onMapReady(googleMap: GoogleMap?) {
         mMap = googleMap
 
-        val hyperMarketLocation = LatLng(28.924572599601724, 30.977850336925275)
-        mMap!!.addMarker(
-            MarkerOptions()
-                .position(hyperMarketLocation)
-                .title(getString(R.string.app_name))
-                .icon(BitmapDescriptorFactory.fromResource(R.drawable.marker))
-        )
-        mMap!!.moveCamera(CameraUpdateFactory.newLatLngZoom(hyperMarketLocation, 20f))
+        val marketLocations = arrayListOf(
+            LatLng(28.9259387285573, 30.98943717427614),
+            LatLng(28.926341099960375, 30.987317207276334),
+        ).forEach {
+            mMap!!.addMarker(
+                MarkerOptions()
+                    .position(it)
+                    .title(getString(R.string.app_name))
+                    .icon(BitmapDescriptorFactory.fromResource(R.drawable.marker))
+            )
+            mMap!!.moveCamera(CameraUpdateFactory.newLatLngZoom(it, 50f))
+        }
     }
 }

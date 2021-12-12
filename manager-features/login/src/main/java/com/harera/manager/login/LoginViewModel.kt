@@ -2,16 +2,19 @@ package com.harera.manager.login
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
+import com.harera.common.base.BaseViewModel
+import com.harera.common.local.UserDataStore
 import com.harera.common.utils.Validity
-import com.harera.repository.abstract.repository.AuthManager
+import com.harera.repository.abstraction.UserRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
 @HiltViewModel
 class LoginViewModel @Inject constructor(
-    val authManager: com.harera.repository.abstraction.repository.AuthManager,
-) : ViewModel() {
+    private val authManager: UserRepository,
+    userDataStore: UserDataStore,
+) : BaseViewModel(userDataStore) {
+
     private var _email = MutableLiveData<String>()
     val email: LiveData<String> = _email
 
@@ -21,19 +24,17 @@ class LoginViewModel @Inject constructor(
     private var _formValidity = MutableLiveData<LoginState>()
     val formValidity: LiveData<LoginState> = _formValidity
 
-    private val _loading = MutableLiveData<Boolean>()
-    val loading: LiveData<Boolean> = _loading
-
     private val _loginSuccess = MutableLiveData<Boolean>()
     val loginSuccess: LiveData<Boolean> = _loginSuccess
 
-    private val _exception = MutableLiveData<Exception?>()
-    val exception: LiveData<Exception?> = _exception
-
     private fun checkFormValidity() {
-        if (_email.value == null || Validity.checkEmail(_email.value!!)) {
-            _formValidity.value = LoginState(emailError = R.string.email_error)
-        } else if (password.value == null || Validity.checkPassword(password.value!!)) {
+        if (_email.value.isNullOrBlank()) {
+            _formValidity.value = LoginState(emailError = R.string.empty_email_error)
+        } else if (!Validity.checkEmail(_email.value!!)) {
+            _formValidity.value = LoginState(emailError = R.string.invalid_email_error)
+        } else if (password.value.isNullOrBlank()) {
+            _formValidity.value = LoginState(emailError = R.string.empty_password)
+        } else if (!Validity.checkPassword(password.value!!)) {
             _formValidity.value = LoginState(passwordError = R.string.password_error)
         } else {
             _formValidity.value = LoginState(isValid = true)
@@ -50,17 +51,17 @@ class LoginViewModel @Inject constructor(
         checkFormValidity()
     }
 
-    fun login() {
-        _loading.value = true
+    suspend fun login() {
+        updateLoading(true)
         authManager
             .signInWithEmailAndPassword(email = email.value!!, password = password.value!!)
             .addOnSuccessListener {
-                _loading.value = false
+                updateLoading(false)
                 _loginSuccess.value = true
             }
             .addOnFailureListener {
-                _loading.value = false
-                _exception.value = it
+                updateLoading(false)
+                handleException(it)
             }
     }
 }

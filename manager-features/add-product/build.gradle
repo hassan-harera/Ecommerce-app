@@ -1,0 +1,13 @@
+apply from:"$rootDir/common-feature-di.gradle"
+
+dependencies {
+    implementation(Libs.intuit)
+    implementation(Libs.gligarPicker)
+    implementation(Libs.picasso)
+    implementation(Libs.viewModels)
+    implementation(Libs.navigationFragment)
+    implementation(Libs.materialDesign)
+
+    implementation project(UiComponents.common)
+    implementation (Libs.constraintLayout)
+}

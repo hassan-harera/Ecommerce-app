@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:theme="@style/HyperPanda"
     tools:context=".CustomerFormFragment">
 
     <LinearLayout
@@ -24,41 +25,51 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/textInputLayoutFirstName"
+            android:id="@+id/firstNameET"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/_10sdp"
             android:hint="@string/first_name"
-            app:startIconDrawable="@drawable/user_name"
-            app:startIconTint="@color/app_yellow">
+            android:selectAllOnFocus="true"
+            android:textAlignment="textStart"
+            android:inputType="textPersonName"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:startIconDrawable="@drawable/name_24">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/first_name"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:imeActionId="@integer/btm_to"
-                android:inputType="text"
+                android:inputType="textEmailAddress"
                 android:lines="1"
                 android:textColor="@color/black" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/textInputLayoutLastName"
+            android:id="@+id/lastNameET"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/_10sdp"
-            android:hint="@string/first_name"
-            app:startIconDrawable="@drawable/user_name"
-            app:startIconTint="@color/app_yellow">
+            android:hint="@string/last_name"
+            android:inputType="textPersonName"
+            android:selectAllOnFocus="true"
+            android:textAlignment="textStart"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:startIconDrawable="@drawable/name_24">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/last_name"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:imeActionId="@integer/btm_to"
-                android:inputType="text"
+                android:inputType="textEmailAddress"
                 android:lines="1"
                 android:textColor="@color/black" />
         </com.google.android.material.textfield.TextInputLayout>
@@ -70,11 +81,10 @@
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/_10sdp"
             android:text="@string/location"
+            android:gravity="end|center"
             android:textAlignment="viewEnd"
-            android:textColor="@color/app_grey"
             app:icon="@drawable/location_24"
             app:iconGravity="start"
-            app:iconTint="@color/app_yellow"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textInputLayoutSecondName" />

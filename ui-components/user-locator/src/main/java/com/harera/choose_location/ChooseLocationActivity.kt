@@ -11,9 +11,9 @@ import android.location.LocationManager
 import android.os.Bundle
 import android.provider.Settings
 import android.widget.Toast
+import androidx.activity.viewModels
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import androidx.lifecycle.ViewModelProvider
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.CameraUpdateFactory
@@ -42,12 +42,11 @@ class ChooseLocationActivity : BaseActivity(), OnMapReadyCallback {
     private val LOC_REQUST_CODE = 3004
 
     private lateinit var bind: ActivityChooseLocationBinding
-    private lateinit var chooseLocationViewModel: ChooseLocationViewModel
+    private val chooseLocationViewModel: ChooseLocationViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         bind = ActivityChooseLocationBinding.inflate(layoutInflater)
-        chooseLocationViewModel = ViewModelProvider(this).get(ChooseLocationViewModel::class.java)
         setContentView(bind.root)
 
         setupMap()

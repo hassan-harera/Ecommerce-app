@@ -10,7 +10,6 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import com.harera.common.base.BaseFragment
-import com.harera.common.utils.Status
 import com.harera.common.utils.navigation.Arguments
 import com.harera.common.utils.navigation.Destinations
 import com.harera.common.utils.navigation.NavigationUtils
@@ -51,28 +50,20 @@ class ProductFragment : BaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         lifecycleScope.launch(Dispatchers.IO) {
-            productViewModel.checkWishState()
+            productViewModel.getWishState()
         }
-        productViewModel.getCartState()
+
+        lifecycleScope.launch(Dispatchers.IO) {
+            productViewModel.getCartState()
+            productViewModel.getProduct()
+        }
+
         setupProductsAdapter()
-
-        productViewModel.getProduct().observe(viewLifecycleOwner) {
-            when (it.status) {
-                Status.ERROR -> {
-                    handleError(it.error)
-                }
-                Status.SUCCESS -> {
-                    handleSuccess()
-                    updateUI(it.data!!)
-                    productViewModel.getCategoryProducts(it.data!!.categoryName)
-                }
-                Status.LOADING -> {
-                    handleLoading()
-                }
-            }
+        productViewModel.product.observe(viewLifecycleOwner) {
+            updateUI(it)
         }
 
-        productViewModel.loadingState.observe(viewLifecycleOwner) {
+        productViewModel.loading.observe(viewLifecycleOwner) {
             handleLoading()
         }
 
@@ -120,7 +111,9 @@ class ProductFragment : BaseFragment() {
 
     private fun setupListener() {
         bind.cart.setOnClickListener {
-            productViewModel.changeCartState()
+            lifecycleScope.launch(Dispatchers.IO) {
+                productViewModel.changeCartState()
+            }
         }
 
         bind.wish.setOnClickListener {

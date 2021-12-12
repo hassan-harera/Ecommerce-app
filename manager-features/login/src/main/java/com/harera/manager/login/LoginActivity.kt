@@ -3,11 +3,13 @@ package com.harera.manager.login
 import android.content.Intent
 import android.os.Bundle
 import androidx.activity.viewModels
+import androidx.lifecycle.lifecycleScope
 import com.harera.common.afterTextChanged
 import com.harera.common.base.BaseActivity
 import com.harera.manager.login.databinding.ActivityLoginBinding
 import com.harera.manager_navigation.HomeActivity
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class LoginActivity : BaseActivity() {
@@ -76,7 +78,9 @@ class LoginActivity : BaseActivity() {
         }
 
         bind.login.setOnClickListener {
-            loginViewModel.login()
+            lifecycleScope.launch {
+                loginViewModel.login()
+            }
             bind.login.isEnabled = false
         }
     }

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="com.harera.hyperpanda">
+    package="com.harera.ecommerce">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
@@ -14,7 +14,7 @@
         tools:node="remove" />
 
     <application
-        android:name=".HyperPandaApp"
+        android:name="com.harera.ecommerce.HyperPandaApp"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -22,7 +22,6 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/HyperPanda">
-
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
@@ -37,25 +36,25 @@
             android:resource="@array/preloaded_fonts" />
 
         <activity
-            android:name=".HomeActivity"
-            android:exported="false"
+            android:name="com.harera.ecommerce.HomeActivity"
+            android:exported="true"
             android:hardwareAccelerated="true" />
 
         <activity
             android:name="com.harera.market_location.MarketLocation"
-            android:exported="false" />
+            android:exported="true" />
 
         <activity
             android:name="com.harera.login.LoginActivity"
-            android:exported="false" />
+            android:exported="true" />
 
         <activity
             android:name="com.harera.confirm_login.ConfirmLoginActivity"
-            android:exported="false" />
+            android:exported="true" />
 
         <activity
-            android:name="com.harera.hyperpanda.MainActivity"
-            android:exported="false">
+            android:name="com.harera.ecommerce.MainActivity"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />

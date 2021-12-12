@@ -4,7 +4,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.harera.categories_name.databinding.CardViewCategoriesCategoryBinding
-import com.harera.model.modelget.Category
+import com.harera.model.model.Category
 
 class CategoriesAdapter(
     private var categories: List<Category> = emptyList(),

@@ -111,7 +111,7 @@
                 android:layout_height="30sp"
                 android:layout_gravity="end|center"
                 android:layout_margin="5sp"
-                android:src="@drawable/baseline_favorite_border_white_24dp"
+                android:src="@drawable/wish_24"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"

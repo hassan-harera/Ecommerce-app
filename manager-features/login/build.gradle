@@ -1,7 +1,7 @@
 apply from: "$rootDir/common-feature-di.gradle"
 
 dependencies {
-    implementation project(Data.repository)
+    api project(Data.repository)
     implementation project(UiComponents.common)
     implementation project(Navigation.manager)
 

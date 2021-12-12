@@ -21,6 +21,7 @@ import com.harera.common.utils.navigation.NavigationUtils
 import com.harera.confirm_login.ConfirmLoginActivity
 import com.harera.market_location.MarketLocation
 import com.opensooq.supernova.gligar.GligarPicker
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
@@ -46,7 +47,10 @@ class AccountFragment : BaseFragment() {
 
         setupListeners()
         setupObservers()
-        accountViewModel.checkUser()
+
+        lifecycleScope.launch(Dispatchers.IO) {
+            accountViewModel.checkUser()
+        }
     }
 
     private fun setupObservers() {
@@ -77,6 +81,10 @@ class AccountFragment : BaseFragment() {
 
         accountViewModel.exception.observe(viewLifecycleOwner) { exception ->
             handleError(exception)
+        }
+
+        connectionLiveData.observe(viewLifecycleOwner) {
+            accountViewModel.updateConnectivity(it)
         }
     }
 

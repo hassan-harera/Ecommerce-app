@@ -14,7 +14,6 @@ dependencies {
 
     testImplementation(Libs.junit4)
     androidTestImplementation(Libs.junitExt)
-    androidTestImplementation(Libs.espresso)
 
     implementation Libs.navigationFragment
     implementation Libs.materialDesign

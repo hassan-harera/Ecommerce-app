@@ -2,14 +2,15 @@ package com.harera.confirm_login
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.FirebaseException
 import com.google.firebase.auth.PhoneAuthCredential
 import com.google.firebase.auth.PhoneAuthProvider
+import com.harera.common.base.BaseViewModel
+import com.harera.common.local.UserDataStore
 import com.harera.common.utils.Response
 import com.harera.common.utils.Validity
-import com.harera.repository.abstraction.repository.AuthManager
+import com.harera.repository.abstraction.UserRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -17,9 +18,9 @@ import javax.inject.Inject
 
 @HiltViewModel
 class ConfirmLoginViewModel @Inject constructor(
-    private val authManager: com.harera.repository.abstraction.repository.AuthManager
-) :
-    ViewModel() {
+    private val authManager: UserRepository,
+    userDataStore: UserDataStore
+) : BaseViewModel(userDataStore) {
     private var _code = MutableLiveData<String>("")
     val code: LiveData<String> = _code
 
@@ -53,24 +54,22 @@ class ConfirmLoginViewModel @Inject constructor(
         }
     }
 
-    fun createCallBack() =
-        object : PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
-            override fun onVerificationCompleted(credential: PhoneAuthCredential) {
-            }
-
-            override fun onVerificationFailed(e: FirebaseException) {
-                _verificationCode.value = Response.error(e, null)
-            }
-
-            override fun onCodeSent(
-                verificationId: String,
-                token: PhoneAuthProvider.ForceResendingToken
-            ) {
-                _verificationCode.value = Response.success(verificationId)
-
-
-            }
+    val createCallBack = object : PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
+        override fun onVerificationCompleted(credential: PhoneAuthCredential) {
         }
+
+        override fun onVerificationFailed(e: FirebaseException) {
+            _verificationCode.value = Response.error(e, null)
+        }
+
+        override fun onCodeSent(
+            verificationId: String,
+            token: PhoneAuthProvider.ForceResendingToken,
+        ) {
+            _verificationCode.value = Response.success(verificationId)
+
+        }
+    }
 
     fun login() {
         _loginOperation.value = Response.loading(null)

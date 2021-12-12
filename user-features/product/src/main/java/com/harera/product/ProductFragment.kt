@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
 import com.harera.common.base.BaseFragment
 import com.harera.common.utils.navigation.Arguments.PRODUCT_ID
@@ -12,6 +13,8 @@ import com.harera.components.product.ProductsAdapter
 import com.harera.image_slider.ProductPicturesAdapter
 import com.harera.model.model.Product
 import com.harera.product.databinding.FragmentProductViewBinding
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class ProductFragment : BaseFragment() {
     private val productViewModel: ProductViewModel by viewModels()
@@ -44,11 +47,17 @@ class ProductFragment : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        productViewModel.getWishState()
-        productViewModel.getCartState()
+
+        lifecycleScope.launch(Dispatchers.IO) {
+            productViewModel.getWishState()
+            productViewModel.getCartState()
+        }
+
         setupProductsAdapter()
 
-        productViewModel.getProduct()
+        lifecycleScope.launch(Dispatchers.IO) {
+            productViewModel.getProduct()
+        }
 
         setupObservers()
     }
@@ -100,19 +109,22 @@ class ProductFragment : BaseFragment() {
     private fun updateUI(product: Product) {
         bind.title.text = product.title
         bind.price.text = "${product.price} EGP"
-        bind.productPics.adapter =
-            ProductPicturesAdapter(product.productPictureUrls.map { it.imageUrl })
+        bind.productPics.adapter = ProductPicturesAdapter(product.productPictureUrls)
 
         setupListener()
     }
 
     private fun setupListener() {
         bind.cart.setOnClickListener {
-            productViewModel.changeCartState()
+            lifecycleScope.launch(Dispatchers.IO) {
+                productViewModel.changeCartState()
+            }
         }
 
         bind.wish.setOnClickListener {
-            productViewModel.changeWishState()
+            lifecycleScope.launch(Dispatchers.IO) {
+                productViewModel.changeWishState()
+            }
         }
     }
 }

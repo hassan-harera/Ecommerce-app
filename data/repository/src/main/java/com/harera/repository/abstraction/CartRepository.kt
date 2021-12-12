@@ -1,16 +1,37 @@
 package com.harera.repository.abstraction
 
-import com.google.android.gms.tasks.Task
-import com.google.firebase.firestore.QuerySnapshot
-import com.harera.model.modelset.CartItem
+import com.harera.model.model.CartItem
 
 interface CartRepository {
 
-    fun removeCartItem(cartItemId: String): Task<Void>
-    fun updateQuantity(cartItemId: String, quantity: Int): Task<Void>
-    fun getCartItems(uid: String): Task<QuerySnapshot>
-    fun addCartItem(cartItem: CartItem): Task<Void>
-    fun updateItemUid(itemId: String, uid: String): Task<Void>
-    fun getCartItem(cartItemId: String): Task<QuerySnapshot>
-    fun getCartItem(productId: String, uid: String): Task<QuerySnapshot>
+    suspend fun removeCartItem(cartItemId: String, forceRefresh: Boolean = true): Result<Boolean>
+
+    suspend fun updateQuantity(
+        cartItemId: String,
+        quantity: Int,
+        forceRefresh: Boolean = true,
+    ): Result<Boolean>
+
+    suspend fun getUserCartItems(
+        uid: String,
+        forceRefresh: Boolean = true,
+    ): Result<List<CartItem>>
+
+    suspend fun addCartItem(cartItem: CartItem, forceRefresh: Boolean = true): Result<Boolean>
+
+    suspend fun updateItemUid(
+        cartItemId: String,
+        uid: String,
+        forceRefresh: Boolean = true,
+    ): Result<Boolean>
+
+    suspend fun getCartItem(
+        cartItemId: String,
+        forceRefresh: Boolean = true,
+    ): Result<CartItem?>
+
+    suspend fun checkCart(cartItemId: String): Result<Boolean>
+
+    suspend fun removeCartItem(cartItemId: String): Result<Boolean>
+    suspend fun getCartItem(productId: String, uid: String): Result<CartItem?>
 }

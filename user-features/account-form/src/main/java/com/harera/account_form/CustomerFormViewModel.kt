@@ -4,17 +4,17 @@ import android.graphics.Bitmap
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import com.google.firebase.FirebaseException
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.PhoneAuthCredential
 import com.google.firebase.auth.PhoneAuthOptions
 import com.google.firebase.auth.PhoneAuthProvider
 import com.google.type.LatLng
+import com.harera.common.base.BaseViewModel
+import com.harera.common.local.UserDataStore
 import com.harera.common.utils.Response
 import com.harera.common.utils.Validity
-import com.harera.model.modelset.User
-import com.harera.repository.abstraction.AuthManager
+import com.harera.model.model.User
 import com.harera.repository.abstraction.UserRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import java.util.concurrent.TimeUnit
@@ -22,9 +22,10 @@ import javax.inject.Inject
 
 @HiltViewModel
 class CustomerFormViewModel @Inject constructor(
-    private val authManager: AuthManager,
-    private val userRepository: UserRepository
-) : ViewModel() {
+    private val authManager: UserRepository,
+    private val userRepository: UserRepository,
+    userDataStore: UserDataStore
+) : BaseViewModel(userDataStore) {
 
     private val _firstName: MutableLiveData<String> = MutableLiveData()
     val firstName: LiveData<String> = _firstName
@@ -49,14 +50,6 @@ class CustomerFormViewModel @Inject constructor(
 
     private val _codeValidityState: MutableLiveData<Boolean> = MutableLiveData()
     val codeValidityState: LiveData<Boolean> = _codeValidityState
-
-    //TODO observe
-    private val _error: MutableLiveData<Exception> = MutableLiveData()
-    val error: LiveData<Exception> = _error
-
-    //TODO observe
-    private val _loading: MutableLiveData<Boolean> = MutableLiveData()
-    val loading: LiveData<Boolean> = _loading
 
     private val _signupFormState = MutableLiveData<CustomerFormState>()
     val medicineFormState: LiveData<CustomerFormState> = _signupFormState
@@ -101,7 +94,8 @@ class CustomerFormViewModel @Inject constructor(
         } else if (_lastName.value.isNullOrBlank()) {
             _signupFormState.value = CustomerFormState(lastNameError = R.string.empty_name_error)
         } else if (phoneNumber.value.isNullOrBlank()) {
-            _signupFormState.value = CustomerFormState(phoneNumberError = R.string.empty_phone_error)
+            _signupFormState.value =
+                CustomerFormState(phoneNumberError = R.string.empty_phone_error)
         } else if (_location.value == null) {
             _signupFormState.value = CustomerFormState(addressError = R.string.empty_location_error)
         } else {
@@ -109,53 +103,53 @@ class CustomerFormViewModel @Inject constructor(
         }
     }
 
-    fun addUser(url: String) {
-        _medicineUpload.value = Response.loading(null)
-        userRepository.addUser(
-            user.value!!.apply {
-                imageUrl = url
-            })
-            .addOnSuccessListener {
+    suspend fun addUser(url: String) {
+        _medicineUpload.postValue(Response.loading(null))
+        userRepository
+            .addUser(
+                user.value!!.apply { imageUrl = url }
+            )
+            .onSuccess {
                 _medicineUpload.value = Response.success(null)
             }
-            .addOnFailureListener {
-                _medicineUpload.value = Response.error(it, null)
+            .onFailure {
+                _medicineUpload.postValue(Response.error(it, null))
             }
     }
 
-    fun uploadUserImage(user: User) {
-        _loading.value = true
-        userRepository.uploadUserImage(
-            image.value!!,
-            user.uid
-        )
-            .addOnSuccessListener {
-                it.storage.downloadUrl.addOnSuccessListener {
-                    _imageUrl.value = it.toString()
-                }
-            }.addOnFailureListener {
-                _error.value = it
+    suspend fun uploadUserImage(user: User) {
+        updateLoading(true)
+        userRepository
+            .uploadUserImage(
+                image.value!!,
+                user.uid
+            )
+            .onSuccess {
+                _imageUrl.postValue(it)
+            }
+            .onFailure {
+                handleException(it)
             }
     }
 
     fun encapsulateUserForm() {
-        _loading.value = true
+        updateLoading(true)
 
         _user.value = User(
+            phoneNumber = phoneNumber.value!!,
+            imageUrl = imageUrl.value,
             firstName = firstName.value!!,
             lastName = lastName.value!!,
-            uid = authManager.getCurrentUser()!!.uid,
-            phoneNumber = phoneNumber.value!!,
-            address = location.value!!,
-            imageUrl = imageUrl.value,
+            long = location.value!!.longitude,
+            lat = location.value!!.latitude,
         )
     }
 
-    fun signInWithPhoneAuthCredential(
-        credential: PhoneAuthCredential
+    suspend fun signInWithPhoneAuthCredential(
+        credential: PhoneAuthCredential,
     ) = authManager.signInWithCredential(credential)
 
-    fun removeUser(userID: String) {
+    suspend fun removeUser(userID: String) {
         userRepository.removeUser(userID)
     }
 
@@ -199,7 +193,7 @@ class CustomerFormViewModel @Inject constructor(
 
             override fun onCodeSent(
                 verificationId: String,
-                token: PhoneAuthProvider.ForceResendingToken
+                token: PhoneAuthProvider.ForceResendingToken,
             ) {
 //                handleSuccess()
 //                verficationCode = verificationId

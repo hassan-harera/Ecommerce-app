@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.GridLayoutManager
 import com.harera.common.base.BaseFragment
-import com.harera.model.modelget.Product
+import com.harera.model.model.Product
 import com.harera.components.product.ProductsAdapter
 import com.harera.search.databinding.FragmentSearchBinding
 
@@ -38,9 +38,9 @@ class SearchFragment : BaseFragment() {
             setProducts(it)
         }
 
-//        bind.searchBar.onSearchConfirmed {
-//            searchViewModel.searchProducts(it)
-//        }
+        connectionLiveData.observe(viewLifecycleOwner) {
+            searchViewModel.updateConnectivity(it)
+        }
     }
 
     private fun setProducts(products: List<Product>) {

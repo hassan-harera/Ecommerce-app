@@ -2,147 +2,147 @@ package com.harera.features.cart
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.viewModelScope
-import com.google.android.gms.tasks.Tasks
-import com.google.firebase.Timestamp
 import com.harera.common.base.BaseViewModel
-import com.harera.model.modelget.CartItem
-import com.harera.model.modelget.Product
-import com.harera.model.modelset.WishListItem
-import com.harera.repository.abstraction.AuthManager
+import com.harera.common.local.UserDataStore
+import com.harera.model.model.CartItem
+import com.harera.model.model.WishItem
 import com.harera.repository.abstraction.CartRepository
 import com.harera.repository.abstraction.ProductRepository
+import com.harera.repository.abstraction.UserRepository
 import com.harera.repository.abstraction.WishListRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.async
-import kotlinx.coroutines.launch
+import org.joda.time.DateTime
 import javax.inject.Inject
 
 @HiltViewModel
 class CartViewModel @Inject constructor(
     private val cartRepository: CartRepository,
     private val wishListRepository: WishListRepository,
-    private val authManager: AuthManager,
+    private val authManager: UserRepository,
     private val productRepository: ProductRepository,
-) : BaseViewModel() {
+    userDataStore: UserDataStore,
+) : BaseViewModel(userDataStore) {
 
-    private val _cartList = MutableLiveData<Map<String, CartItem>>()
-    val cartList: LiveData<Map<String, CartItem>> = _cartList
+    private val _cartList = MutableLiveData<List<CartItem>>()
+    val cartList: LiveData<List<CartItem>> = _cartList
 
-    fun removeItem(cartItemId: String) {
-        updateLoading(true)
-        cartRepository.removeCartItem(
-            cartItemId
-        ).addOnSuccessListener {
-            updateLoading(false)
-            _cartList.value!!.minus(cartItemId).let {
-                _cartList.value = it
-            }
-        }.addOnFailureListener {
-            updateLoading(false)
-            updateException(it)
-        }
-    }
-
-    fun getCartItems() = viewModelScope.launch(Dispatchers.IO) {
+    suspend fun removeCartItem(cartItemId: String) {
         updateLoading(true)
 
-        val task = cartRepository.getCartItems(authManager.getCurrentUser()!!.uid)
-        val result = Tasks.await(task)
-
-        if (task.isSuccessful)
-            getCartItemsDetails(result.documents.map { it.toObject(CartItem::class.java)!! })
-        else
-            updateException(task.exception)
-
-        updateLoading(false)
-    }
-
-    private fun getCartItemsDetails(list: List<CartItem>) = viewModelScope.launch(Dispatchers.IO) {
-        list.map { cartItem ->
-            val product = async(Dispatchers.IO) {
-                Tasks.await(
-                    productRepository.getProduct(cartItem.productId)
-                ).toObject(Product::class.java)!!
-            }.await()
-            cartItem.productTitle = product.title
-            cartItem.productPrice = product.price.toFloat()
-            cartItem.productImageUrl = product.productPictureUrls.first()
-            cartItem
-        }.let {
-            updateCartList(it)
-        }
-    }
-
-    fun updateQuantity(cartItemId: String, quantity: Int) = viewModelScope.launch(Dispatchers.IO) {
-        updateLoading(true)
-
-        val task = cartRepository.updateQuantity(
-            cartItemId,
-            quantity
-        )
-        Tasks.await(task)
-
-        if (task.isSuccessful) {
-            _cartList.value!![cartItemId]!!.quantity = quantity
-            updateCartList(_cartList.value!!.map { it.value })
-        } else
-            updateException(task.exception)
-        updateLoading(false)
-    }
-
-    private fun updateCartList(list: List<CartItem>) = viewModelScope.launch(Dispatchers.Main) {
-        _cartList.value = list.associateBy { it.productId + it.uid }
-    }
-
-    private suspend fun addItemToFavourite(cartItemId: String) =
-        viewModelScope.async(Dispatchers.IO) {
-            updateLoading(true)
-
-            val cartItem = cartList.value!![cartItemId]!!
-            val task = wishListRepository.addWishListItem(
-                WishListItem(
-                    cartItem.uid,
-                    cartItem.productId,
-                    Timestamp.now()
-                )
-            )
-            Tasks.await(task)
-
-            if (task.isSuccessful) {
-                _cartList.value!!.minus(cartItemId).let {
-                    updateCartList(it.map { it.value })
+        cartRepository
+            .removeCartItem(uid)
+            .onSuccess {
+                updateLoading(false)
+                _cartList.apply {
+                    postValue(value?.dropWhile { it.cartItemId == cartItemId })
                 }
-            } else {
-                updateException(task.exception)
             }
+            .onFailure {
+                updateLoading(false)
+                handleException(it)
+            }
+    }
 
-            updateLoading(false)
-            return@async task.isSuccessful
-        }.await()
+    suspend fun getCartItems() {
+        updateLoading(true)
 
-    fun moveToFavourite(cartItemId: String) {
-        viewModelScope.launch {
-            updateLoading(true)
-            val result = addItemToFavourite(cartItemId)
-            if (result)
-                removeItem(cartItemId)
-            updateLoading(false)
+        cartRepository
+            .getUserCartItems(authManager.getCurrentUser()!!.uid)
+            .onSuccess {
+                updateLoading(false)
+                _cartList.postValue(it)
+            }
+            .onFailure {
+                updateLoading(false)
+                handleException(it)
+            }
+    }
+
+    suspend fun updateQuantity(cartItemId: String, quantity: Int) {
+        updateLoading(true)
+
+        val item = cartList.value?.first { it.cartItemId == cartItemId }!!
+
+        cartRepository
+            .updateQuantity(cartItemId, quantity)
+            .onSuccess {
+                updateLoading(false)
+                _cartList.apply {
+                    item.quantity = quantity
+                    postValue(value)
+                }
+            }
+            .onFailure {
+                updateLoading(false)
+                handleException(it)
+            }
+    }
+
+    private fun updateCartList(list: List<CartItem>) {
+        _cartList.postValue(list)
+    }
+
+    private suspend fun addItemToFavourite(cartItemId: String) {
+        updateLoading(true)
+
+        val product = cartList.value!!.first { cartItemId == it.cartItemId }
+
+        wishListRepository
+            .addWishListItem(
+                WishItem(
+                    uid = uid,
+                    productPrice = product.productPrice,
+                    productTitle = product.productTitle,
+                    productImageUrl = product.productImageUrl,
+                    productId = product.productId,
+                    time = DateTime.now().toString()
+                )
+            ).onSuccess { isSuccessful ->
+                updateLoading(false)
+                if (isSuccessful) {
+                    removeCartItem(cartItemId)
+                }
+            }.onFailure {
+                updateLoading(false)
+                handleException(it)
+            }
+    }
+
+    suspend fun moveToFavourite(cartItemId: String) {
+        addItemToFavourite(cartItemId)
+    }
+
+    suspend fun plusQuantity(cartItemId: String) {
+        val newQuantity = cartList.value!!.first { it.cartItemId == cartItemId }.quantity + 1
+
+        cartRepository
+            .updateQuantity(cartItemId, newQuantity)
+            .onSuccess {
+                updateCartItemQuantity(cartItemId, newQuantity)
+            }
+            .onFailure {
+                handleException(it)
+            }
+    }
+
+    private fun updateCartItemQuantity(cartItemId: String, newQuantity: Int) {
+        cartList.value!!.first { it.cartItemId == cartItemId }.quantity = newQuantity
+
+        _cartList.apply {
+            postValue(value)
         }
     }
 
-    fun plusQuantity(cartItemId: String) {
-        cartRepository.updateQuantity(
-            cartItemId,
-            cartList.value!![cartItemId]!!.quantity
-        )
-    }
+    suspend fun minusQuantity(cartItemId: String) {
+        val newQuantity = cartList.value!!.first { it.cartItemId == cartItemId }.quantity - 1
 
-    fun minusQuantity(cartItemId: String) {
-        cartRepository.updateQuantity(
-            cartItemId,
-            cartList.value!![cartItemId]!!.quantity
-        )
+        cartRepository
+            .updateQuantity(cartItemId, newQuantity)
+            .onSuccess {
+                updateCartItemQuantity(cartItemId, newQuantity)
+            }
+            .onFailure {
+                handleException(it)
+            }
     }
 }

@@ -76,7 +76,7 @@
                 android:layout_height="35dp"
                 android:layout_margin="5dp"
                 android:background="@color/transparent_selected"
-                android:src="@drawable/baseline_favorite_border_white_24dp"
+                android:src="@drawable/wish_24"
                 app:layout_constraintBottom_toBottomOf="@+id/product_pics"
                 app:layout_constraintStart_toStartOf="parent"
                 app:tint="@color/green" />

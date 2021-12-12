@@ -7,11 +7,15 @@
         <entry key="..\:/Users/Harera/AndroidStudioProjects/HyperPanda/common/src/main/res/drawable-v24/baseline_favorite_border_white_24dp.xml" value="0.36875" />
         <entry key="..\:/Users/Harera/AndroidStudioProjects/HyperPanda/common/src/main/res/drawable-v24/baseline_notifications_none_white_24dp.xml" value="0.22395833333333334" />
         <entry key="..\:/Users/Harera/AndroidStudioProjects/HyperPanda/common/src/main/res/drawable-v24/btn_back_yellow.xml" value="0.22395833333333334" />
+        <entry key="..\:/Users/Harera/AndroidStudioProjects/HyperPanda/common/src/main/res/drawable-v24/filled_heart_24.xml" value="0.29814814814814816" />
         <entry key="..\:/Users/Harera/AndroidStudioProjects/HyperPanda/common/src/main/res/drawable-v24/ic_shopping_cart.xml" value="0.36875" />
-        <entry key="..\:/Users/Harera/AndroidStudioProjects/HyperPanda/common/src/main/res/drawable-v24/selector_button.xml" value="0.3527777777777778" />
+        <entry key="..\:/Users/Harera/AndroidStudioProjects/HyperPanda/common/src/main/res/drawable-v24/ic_sparkle_header.xml" value="0.2212962962962963" />
+        <entry key="..\:/Users/Harera/AndroidStudioProjects/HyperPanda/common/src/main/res/drawable-v24/selector_button.xml" value="0.25" />
         <entry key="..\:/Users/Harera/AndroidStudioProjects/HyperPanda/common/src/main/res/drawable-v24/selector_button2.xml" value="0.22395833333333334" />
+        <entry key="..\:/Users/Harera/AndroidStudioProjects/HyperPanda/common/src/main/res/drawable/arrow_forward.xml" value="0.2175925925925926" />
         <entry key="..\:/Users/Harera/AndroidStudioProjects/HyperPanda/common/src/main/res/drawable/category_background.xml" value="0.36875" />
         <entry key="..\:/Users/Harera/AndroidStudioProjects/HyperPanda/common/src/main/res/drawable/ic_home_black_24dp.xml" value="0.3828125" />
+        <entry key="..\:/Users/Harera/AndroidStudioProjects/HyperPanda/common/src/main/res/drawable/ic_star_rate.xml" value="0.2212962962962963" />
         <entry key="..\:/Users/Harera/AndroidStudioProjects/HyperPanda/common/src/main/res/drawable/login_bottom_tool_bar.xml" value="0.22135416666666666" />
         <entry key="..\:/Users/Harera/AndroidStudioProjects/HyperPanda/common/src/main/res/drawable/login_tool_bar.xml" value="0.22135416666666666" />
         <entry key="..\:/Users/Harera/AndroidStudioProjects/HyperPanda/common/src/main/res/drawable/num_button.xml" value="0.22135416666666666" />
@@ -33,13 +37,17 @@
         <entry key="..\:/Users/Harera/AndroidStudioProjects/HyperPanda/features/shop/src/main/res/layout/card_view_shop_product.xml" value="0.19375" />
         <entry key="..\:/Users/Harera/AndroidStudioProjects/HyperPanda/features/shop/src/main/res/layout/fragment_shop.xml" value="0.14" />
         <entry key="..\:/Users/Harera/AndroidStudioProjects/HyperPanda/manager-features/add-category/src/main/res/layout/fragment_add_category.xml" value="0.2" />
+        <entry key="..\:/Users/Harera/AndroidStudioProjects/HyperPanda/manager-features/add-offers-group/src/main/res/layout/fragment_add_offers_group.xml" value="0.36666666666666664" />
+        <entry key="..\:/Users/Harera/AndroidStudioProjects/HyperPanda/manager-features/add-offers-group/src/main/res/layout/fragment_add_product.xml" value="0.18" />
+        <entry key="..\:/Users/Harera/AndroidStudioProjects/HyperPanda/manager-features/add-product/src/main/res/layout/fragment.xml" value="0.25" />
+        <entry key="..\:/Users/Harera/AndroidStudioProjects/HyperPanda/manager-features/add-product/src/main/res/layout/fragment_add_product.xml" value="0.25" />
         <entry key="..\:/Users/Harera/AndroidStudioProjects/HyperPanda/manager-features/categories/src/main/res/layout/card_view_category_product.xml" value="0.36666666666666664" />
         <entry key="..\:/Users/Harera/AndroidStudioProjects/HyperPanda/manager-features/categories/src/main/res/layout/fragment_categories.xml" value="0.2" />
-        <entry key="..\:/Users/Harera/AndroidStudioProjects/HyperPanda/manager-features/dashboard/src/main/res/layout/fragment_dashboard.xml" value="0.36666666666666664" />
+        <entry key="..\:/Users/Harera/AndroidStudioProjects/HyperPanda/manager-features/dashboard/src/main/res/layout/fragment_dashboard.xml" value="0.22" />
         <entry key="..\:/Users/Harera/AndroidStudioProjects/HyperPanda/manager-features/edit-product/src/main/res/layout/fragment_edit_product.xml" value="0.19375" />
         <entry key="..\:/Users/Harera/AndroidStudioProjects/HyperPanda/manager-features/login/src/main/res/layout/activity_login.xml" value="0.25" />
         <entry key="..\:/Users/Harera/AndroidStudioProjects/HyperPanda/manager-features/login/src/main/res/layout/activity_signup.xml" value="0.36666666666666664" />
-        <entry key="..\:/Users/Harera/AndroidStudioProjects/HyperPanda/manager-features/product/src/main/res/layout/fragment_product.xml" value="0.2078125" />
+        <entry key="..\:/Users/Harera/AndroidStudioProjects/HyperPanda/manager-features/product/src/main/res/layout/fragment_product.xml" value="0.25" />
         <entry key="..\:/Users/Harera/AndroidStudioProjects/HyperPanda/manager-features/product/src/main/res/layout/fragment_product_view.xml" value="0.19375" />
         <entry key="..\:/Users/Harera/AndroidStudioProjects/HyperPanda/manager-navigation/src/main/res/layout/activity_home.xml" value="0.19114583333333332" />
         <entry key="..\:/Users/Harera/AndroidStudioProjects/HyperPanda/manager-navigation/src/main/res/layout/fragment_dashboard.xml" value="0.2078125" />
@@ -53,6 +61,9 @@
         <entry key="..\:/Users/Harera/AndroidStudioProjects/HyperPanda/manager/src/main/res/layout/activity_main.xml" value="0.19375" />
         <entry key="..\:/Users/Harera/AndroidStudioProjects/HyperPanda/manager/src/main/res/layout/fragment_dashboard.xml" value="0.36666666666666664" />
         <entry key="..\:/Users/Harera/AndroidStudioProjects/HyperPanda/manager/src/main/res/layout/navigation_home.xml" value="0.25" />
+        <entry key="..\:/Users/Harera/AndroidStudioProjects/HyperPanda/navigation/manager-navigation/src/main/res/layout/activity_home.xml" value="0.11639492753623189" />
+        <entry key="..\:/Users/Harera/AndroidStudioProjects/HyperPanda/navigation/manager-navigation/src/main/res/layout/navigation_home.xml" value="0.20885416666666667" />
+        <entry key="..\:/Users/Harera/AndroidStudioProjects/HyperPanda/navigation/user-navigation/src/main/res/menu/navigation_menu.xml" value="0.2015625" />
         <entry key="..\:/Users/Harera/AndroidStudioProjects/HyperPanda/resources/src/main/res/drawable-v24/bottom_nav_background.xml" value="0.22395833333333334" />
         <entry key="..\:/Users/Harera/AndroidStudioProjects/HyperPanda/resources/src/main/res/drawable/bottom_nav_icon_back.xml" value="0.22395833333333334" />
         <entry key="..\:/Users/Harera/AndroidStudioProjects/HyperPanda/resources/src/main/res/drawable/num_button.xml" value="0.22395833333333334" />
@@ -68,12 +79,12 @@
         <entry key="..\:/Users/Harera/AndroidStudioProjects/HyperPanda/ui-components/image-card/src/main/res/layout/card_view_image.xml" value="0.20520833333333333" />
         <entry key="..\:/Users/Harera/AndroidStudioProjects/HyperPanda/ui-components/image-slider/src/main/res/layout/card_view_image.xml" value="0.2078125" />
         <entry key="..\:/Users/Harera/AndroidStudioProjects/HyperPanda/ui-components/loading/src/main/res/font/lalezar.xml" value="0.23802083333333332" />
-        <entry key="..\:/Users/Harera/AndroidStudioProjects/HyperPanda/ui-components/loading/src/main/res/layout/loading_dialog.xml" value="0.2078125" />
+        <entry key="..\:/Users/Harera/AndroidStudioProjects/HyperPanda/ui-components/loading/src/main/res/layout/loading_dialog.xml" value="0.25" />
         <entry key="..\:/Users/Harera/AndroidStudioProjects/HyperPanda/ui-components/product/src/main/res/layout/card_view_category_product.xml" value="0.2078125" />
         <entry key="..\:/Users/Harera/AndroidStudioProjects/HyperPanda/ui-components/src/main/res/font/lalezar.xml" value="0.23802083333333332" />
         <entry key="..\:/Users/Harera/AndroidStudioProjects/HyperPanda/ui-components/wish-item/src/main/res/layout/card_view_wish_item.xml" value="0.22" />
         <entry key="..\:/Users/Harera/AndroidStudioProjects/HyperPanda/user-features/account-form/src/main/res/layout/activity_login_confirm.xml" value="0.2078125" />
-        <entry key="..\:/Users/Harera/AndroidStudioProjects/HyperPanda/user-features/account-form/src/main/res/layout/fragment_account_form.xml" value="0.20520833333333333" />
+        <entry key="..\:/Users/Harera/AndroidStudioProjects/HyperPanda/user-features/account-form/src/main/res/layout/fragment_account_form.xml" value="0.22" />
         <entry key="..\:/Users/Harera/AndroidStudioProjects/HyperPanda/user-features/account-form/src/main/res/layout/fragment_signup.xml" value="0.2078125" />
         <entry key="..\:/Users/Harera/AndroidStudioProjects/HyperPanda/user-features/account/src/main/res/layout/fragment_account.xml" value="0.36666666666666664" />
         <entry key="..\:/Users/Harera/AndroidStudioProjects/HyperPanda/user-features/account/src/main/res/layout/fragment_unsigned_account.xml" value="0.33" />
@@ -88,21 +99,26 @@
         <entry key="..\:/Users/Harera/AndroidStudioProjects/HyperPanda/user-features/offer/src/main/res/layout/card_view_image.xml" value="0.35260416666666666" />
         <entry key="..\:/Users/Harera/AndroidStudioProjects/HyperPanda/user-features/offer/src/main/res/layout/fragmenr_offer_view.xml" value="0.36666666666666664" />
         <entry key="..\:/Users/Harera/AndroidStudioProjects/HyperPanda/user-features/offer/src/main/res/layout/fragment_offer_view.xml" value="0.1" />
-        <entry key="..\:/Users/Harera/AndroidStudioProjects/HyperPanda/user-features/product/src/main/res/layout/fragment_product_view.xml" value="0.19114583333333332" />
+        <entry key="..\:/Users/Harera/AndroidStudioProjects/HyperPanda/user-features/product/src/main/res/layout/fragment_product_view.xml" value="0.22" />
+        <entry key="..\:/Users/Harera/AndroidStudioProjects/HyperPanda/user-features/search/src/main/res/layout-ar/fragment_search.xml" value="0.24322916666666666" />
         <entry key="..\:/Users/Harera/AndroidStudioProjects/HyperPanda/user-features/search/src/main/res/layout/fragment_search.xml" value="0.2" />
-        <entry key="..\:/Users/Harera/AndroidStudioProjects/HyperPanda/user-features/shop/src/main/res/layout/card_view_shop_category.xml" value="0.2078125" />
+        <entry key="..\:/Users/Harera/AndroidStudioProjects/HyperPanda/user-features/shop/src/main/res/layout/card_view_shop_category.xml" value="0.33" />
         <entry key="..\:/Users/Harera/AndroidStudioProjects/HyperPanda/user-features/shop/src/main/res/layout/card_view_shop_product.xml" value="0.19375" />
-        <entry key="..\:/Users/Harera/AndroidStudioProjects/HyperPanda/user-features/shop/src/main/res/layout/fragment_shop.xml" value="0.18366770274088726" />
+        <entry key="..\:/Users/Harera/AndroidStudioProjects/HyperPanda/user-features/shop/src/main/res/layout/fragment_shop.xml" value="0.14" />
         <entry key="..\:/Users/Harera/AndroidStudioProjects/HyperPanda/user-features/wishlist/src/main/res/layout/fragment_empty_list.xml" value="0.36666666666666664" />
         <entry key="..\:/Users/Harera/AndroidStudioProjects/HyperPanda/user-features/wishlist/src/main/res/layout/fragment_wishlist.xml" value="0.25" />
         <entry key="..\:/Users/Harera/AndroidStudioProjects/HyperPanda/user-navigation/src/main/res/menu/bottom_nav_menu.xml" value="0.19114583333333332" />
         <entry key="..\:/Users/Harera/AndroidStudioProjects/HyperPanda/user-navigation/src/main/res/menu/tool_bar_menu.xml" value="0.2078125" />
         <entry key="..\:/Users/Harera/AndroidStudioProjects/HyperPanda/user-navigation/src/main/res/menu/top_app_bar.xml" value="0.19375" />
+        <entry key="..\:/Users/Harera/AndroidStudioProjects/HyperPanda/user/src/main/res/layout-ar/activity_home.xml" value="0.20885416666666667" />
+        <entry key="..\:/Users/Harera/AndroidStudioProjects/HyperPanda/user/src/main/res/layout-ar/activity_main.xml" value="0.19479166666666667" />
+        <entry key="..\:/Users/Harera/AndroidStudioProjects/HyperPanda/user/src/main/res/layout-ar/navigation_content.xml" value="0.22" />
+        <entry key="..\:/Users/Harera/AndroidStudioProjects/HyperPanda/user/src/main/res/layout-ar/navigation_home.xml" value="0.24322916666666666" />
         <entry key="..\:/Users/Harera/AndroidStudioProjects/HyperPanda/user/src/main/res/layout/activity_home.xml" value="0.18" />
         <entry key="..\:/Users/Harera/AndroidStudioProjects/HyperPanda/user/src/main/res/layout/activity_main.xml" value="0.1796875" />
         <entry key="..\:/Users/Harera/AndroidStudioProjects/HyperPanda/user/src/main/res/layout/nav_header.xml" value="0.36666666666666664" />
         <entry key="..\:/Users/Harera/AndroidStudioProjects/HyperPanda/user/src/main/res/layout/navigation_conent.xml" value="0.36666666666666664" />
-        <entry key="..\:/Users/Harera/AndroidStudioProjects/HyperPanda/user/src/main/res/layout/navigation_content.xml" value="0.2" />
+        <entry key="..\:/Users/Harera/AndroidStudioProjects/HyperPanda/user/src/main/res/layout/navigation_content.xml" value="0.33" />
         <entry key="..\:/Users/Harera/AndroidStudioProjects/HyperPanda/user/src/main/res/layout/navigation_header.xml" value="0.33" />
         <entry key="..\:/Users/Harera/AndroidStudioProjects/HyperPanda/user/src/main/res/layout/navigation_home.xml" value="0.19375" />
         <entry key="..\:/Users/Harera/AndroidStudioProjects/HyperPanda/user/src/main/res/menu/navigation_menu.xml" value="0.36666666666666664" />

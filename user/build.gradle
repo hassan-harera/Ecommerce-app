@@ -6,6 +6,7 @@ plugins {
 apply plugin: 'kotlin-kapt'
 apply plugin: "androidx.navigation.safeargs"
 apply plugin: 'dagger.hilt.android.plugin'
+apply plugin: 'com.squareup.sqldelight'
 android {
     compileSdkVersion DefaultConfig.compileSdk
     buildToolsVersion DefaultConfig.buildToolsVersion
@@ -52,7 +53,7 @@ dependencies {
 
     implementation(Libs.playServicesTasks)
 
-    implementation project(Data.repository)
+    api project(Data.repository)
 
     implementation(Libs.androidxCore)
     implementation(Libs.appcompat)
@@ -68,7 +69,14 @@ dependencies {
     implementation(Libs.liveData)
     implementation(Libs.viewModels)
     kapt(Libs.lifeCycleCompiler)
+
+    implementation(Room.sqlDelight)
 }
 kapt {
     correctErrorTypes = true
+}
+sqldelight {
+    LocalDatabase {
+        packageName = "com.harera.hyperpanda.local"
+    }
 }

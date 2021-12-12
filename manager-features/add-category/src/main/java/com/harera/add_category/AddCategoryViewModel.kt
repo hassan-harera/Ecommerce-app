@@ -4,19 +4,19 @@ import android.graphics.Bitmap
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import com.google.android.gms.tasks.Tasks
 import com.harera.common.base.BaseViewModel
+import com.harera.common.local.UserDataStore
 import com.harera.common.utils.Validity
-import com.harera.model.modelset.Category
+import com.harera.model.model.Category
 import com.harera.repository.abstraction.CategoryRepository
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class AddCategoryViewModel @Inject constructor(
     private val categoryRepository: CategoryRepository,
-) : BaseViewModel() {
+    userDataStore: UserDataStore,
+) : BaseViewModel(userDataStore) {
 
     private val _categoryName: MutableLiveData<String> = MutableLiveData()
     val categoryName: LiveData<String> = _categoryName
@@ -26,11 +26,6 @@ class AddCategoryViewModel @Inject constructor(
 
     private val _imageUrl: MutableLiveData<String> = MutableLiveData()
     val imageUrl: LiveData<String> = _imageUrl
-
-    private val _error: MutableLiveData<Exception> = MutableLiveData()
-    val error: LiveData<Exception> = _error
-
-    private val _loading: MutableLiveData<Boolean> = MutableLiveData()
 
     private val _operationCompleted: MutableLiveData<Boolean> = MutableLiveData()
     val operationCompleted: LiveData<Boolean> = _operationCompleted
@@ -67,54 +62,48 @@ class AddCategoryViewModel @Inject constructor(
     }
 
     fun submitForm() {
-        viewModelScope.launch (Dispatchers.IO) {
-            if(uploadCategoryImage()) {
-                if (encapsulateForm()) {
-                    addCategory(category = category.value!!)
-                }
+        viewModelScope.launch(Dispatchers.IO) {
+            uploadCategoryImage()
+            encapsulateForm()
+            addCategory(category = category.value!!)
+        }
+    }
+
+    private suspend fun addCategory(category: Category) {
+        updateLoading(true)
+
+        categoryRepository
+            .addCategory(category = category)
+            .onSuccess {
+                updateLoading(true)
+                _operationCompleted.postValue(it)
             }
+            .onFailure {
+                updateLoading(true)
+                handleException(it)
+            }
+    }
+
+    private fun encapsulateForm() {
+        Category(
+            categoryName = categoryName.value!!,
+            categoryImagerUrl = imageUrl.value!!,
+        ).let {
+            _category.postValue(it)
         }
     }
 
-    private fun addCategory(category: Category) {
-        _loading.value = true
-        categoryRepository.addCategory(
-            category = category
-        ).addOnSuccessListener {
-            _operationCompleted.value = true
-            _loading.value = false
-        }.addOnFailureListener {
-            _error.value = it
-            _loading.value = false
-            _operationCompleted.value = false
-        }
-    }
-
-    private suspend fun encapsulateForm(): Boolean {
-        _loading.value = true
-
-        return viewModelScope.async(Dispatchers.IO) {
-            _category.value = Category(
-                categoryName = categoryName.value!!,
-                categoryImagerUrl = imageUrl.value!!,
-            )
-            true
-        }.await()
-    }
-
-    private suspend fun uploadCategoryImage(): Boolean {
-        return viewModelScope.async(Dispatchers.IO) {
-            val uploadTask = categoryRepository.uploadCategoryImage(
+    private suspend fun uploadCategoryImage() {
+        categoryRepository
+            .uploadCategoryImage(
                 categoryName = categoryName.value!!,
                 imageBitmap = image.value!!,
             )
-            val result = Tasks.await(uploadTask)
-
-            val urlTask = result.storage.downloadUrl
-            val urlResult = Tasks.await(urlTask)
-            _imageUrl.value = urlResult.toString()
-
-            uploadTask.isSuccessful
-        }.await()
+            .onSuccess {
+                _imageUrl.postValue(it)
+            }
+            .onFailure {
+                handleException(it)
+            }
     }
 }

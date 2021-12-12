@@ -17,7 +17,7 @@ import com.opensooq.supernova.gligar.GligarPicker
 
 class AddCategoryFragment : BaseFragment() {
     companion object {
-        private val IMAGE_REQ_CODE = 3004
+        private const val IMAGE_REQ_CODE = 3004
     }
 
     private lateinit var bind: FragmentAddCategoryBinding
@@ -52,7 +52,7 @@ class AddCategoryFragment : BaseFragment() {
             handleLoading(state = it)
         }
 
-        addCategoryViewModel.error.observe(viewLifecycleOwner) {
+        addCategoryViewModel.exception.observe(viewLifecycleOwner) {
             handleError(exception = it)
         }
 

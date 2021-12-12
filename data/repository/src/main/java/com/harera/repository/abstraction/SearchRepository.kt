@@ -1,9 +1,8 @@
 package com.harera.repository.abstraction
 
-import com.google.android.gms.tasks.Task
-import com.google.firebase.firestore.QuerySnapshot
+import com.harera.model.model.Product
 
 interface SearchRepository {
 
-    fun searchProducts(text: String): Task<QuerySnapshot>
+    suspend fun searchProducts(text: String): Result<List<Product>>
 }

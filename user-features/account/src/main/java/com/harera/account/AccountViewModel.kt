@@ -4,17 +4,18 @@ import android.graphics.Bitmap
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.harera.common.base.BaseViewModel
+import com.harera.common.local.UserDataStore
 import com.harera.common.utils.Validity
-import com.harera.repository.abstraction.repository.AuthManager
-import com.harera.repository.abstraction.repository.UserRepository
+import com.harera.repository.abstraction.UserRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
 @HiltViewModel
 class AccountViewModel @Inject constructor(
-    private val authManager: com.harera.repository.abstraction.repository.AuthManager,
-    private val userRepository: com.harera.repository.abstraction.repository.UserRepository,
-) : BaseViewModel() {
+    private val authManager: UserRepository,
+    private val userRepository: UserRepository,
+    userDataStore: UserDataStore
+) : BaseViewModel(userDataStore) {
 
     private var _userIsAnonymous = MutableLiveData<Boolean>()
     val userIsAnonymous: LiveData<Boolean> = _userIsAnonymous
@@ -32,7 +33,7 @@ class AccountViewModel @Inject constructor(
 
     }
 
-    fun checkUser() {
+    suspend fun checkUser() {
         _userIsAnonymous.value = authManager.getCurrentUser()!!.isAnonymous
     }
 

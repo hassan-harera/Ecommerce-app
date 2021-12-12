@@ -3,102 +3,91 @@ package com.harera.wishlist
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import com.google.android.gms.tasks.Tasks
-import com.google.firebase.Timestamp
 import com.harera.common.base.BaseViewModel
-import com.harera.model.modelget.Product
-import com.harera.model.modelget.WishItem
-import com.harera.model.modelset.CartItem
-import com.harera.repository.abstraction.repository.AuthManager
-import com.harera.repository.abstraction.repository.CartRepository
-import com.harera.repository.abstraction.repository.ProductRepository
-import com.harera.repository.abstraction.repository.WishListRepository
+import com.harera.common.local.UserDataStore
+import com.harera.model.model.CartItem
+import com.harera.model.model.WishItem
+import com.harera.repository.abstraction.CartRepository
+import com.harera.repository.abstraction.ProductRepository
+import com.harera.repository.abstraction.UserRepository
+import com.harera.repository.abstraction.WishListRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
+import org.joda.time.DateTime
 import javax.inject.Inject
 
 @HiltViewModel
 class WishListViewModel @Inject constructor(
-    private val wishListRepository: com.harera.repository.abstraction.repository.WishListRepository,
-    private val cartRepository: com.harera.repository.abstraction.repository.CartRepository,
-    private val authManager: com.harera.repository.abstraction.repository.AuthManager,
-    private val productRepository: com.harera.repository.abstraction.repository.ProductRepository,
-) : BaseViewModel() {
+    private val wishListRepository: WishListRepository,
+    private val cartRepository: CartRepository,
+    userDataStore: UserDataStore
+) : BaseViewModel(userDataStore) {
 
     private val _productId = MutableLiveData<String>()
 
-    private val _wishList = MutableLiveData<Map<String, WishItem>>()
-    val wishList: LiveData<Map<String, WishItem>> = _wishList
+    private val _wishList = MutableLiveData<List<WishItem>>()
+    val wishList: LiveData<List<WishItem>> = _wishList
 
-    fun getWishListItems() = viewModelScope.launch(Dispatchers.IO) {
+    suspend fun getWishListItems() {
         updateLoading(true)
 
-        val task = wishListRepository.getWishListItems(authManager.getCurrentUser()!!.uid)
-        val result = Tasks.await(task)
-
-        if (task.isSuccessful)
-            getWishListItemsDetails(result.documents.map { it.toObject(WishItem::class.java)!! })
-        else
-            updateException(task.exception)
-        updateLoading(false)
-    }
-
-    private fun getWishListItemsDetails(list: List<WishItem>) =
-        viewModelScope.launch(Dispatchers.IO) {
-            list.map { wishItem ->
-                val product = async(Dispatchers.IO) {
-                    Tasks.await(
-                        productRepository.getProduct(wishItem.productId)
-                    ).toObject(Product::class.java)!!
-                }.await()
-                wishItem.productTitle = product.title
-                wishItem.productImageUrl = product.productPictureUrls.first()
-                wishItem
-            }.let {
-                updateWishList(it)
+        wishListRepository
+            .getUserWishItems(uid)
+            .onSuccess {
+                updateLoading(false)
             }
-        }
-
-    fun addWishItemToCart(productId: String) = viewModelScope.launch(Dispatchers.IO) {
-        updateLoading(true)
-        removeWishItem(productId = productId)
-        addCartItem(productId).await()
-        updateLoading(false)
+            .onFailure {
+                updateLoading(false)
+                handleException(it)
+            }
     }
 
-    private fun addCartItem(productId: String) = viewModelScope.async(Dispatchers.IO) {
-        cartRepository.addCartItem(
-            CartItem(
-                uid = authManager.getCurrentUser()!!.uid,
-                productId = productId,
-                time = Timestamp.now(),
-                quantity = 1
-            )
-        )
-    }
-
-    fun removeWishItem(productId: String) = viewModelScope.launch(Dispatchers.IO) {
-        updateLoading(true)
-        viewModelScope.launch(Dispatchers.IO) {
+    fun addWishItemToCart(productId: String) {
+        viewModelScope.launch {
             updateLoading(true)
-
-            val task =
-                wishListRepository.removeWishListItem(productId, authManager.getCurrentUser()!!.uid)
-            Tasks.await(task)
-
-            if (task.isSuccessful)
-                _wishList.value!!.minus(productId).let {
-                    updateWishList(it.map { it.value })
-                }
-            else
-                updateException(task.exception)
+            removeWishItem(productId = productId)
+            addCartItem(productId = productId)
             updateLoading(false)
         }
     }
 
-    private fun updateWishList(list: List<WishItem>) = viewModelScope.launch(Dispatchers.Main) {
-        _wishList.value = list.associateBy { it.productId }
+    private suspend fun addCartItem(productId: String) {
+        val product = wishList.value?.filter { it.productId == productId }?.first()!!
+
+        cartRepository.addCartItem(
+            CartItem(
+                uid,
+                productId,
+                quantity = 1,
+                time = DateTime.now().toString(),
+                product.productImageUrl,
+                product.productTitle,
+                product.productPrice,
+            )
+        )
+    }
+
+    suspend fun removeWishItem(productId: String) {
+        updateLoading(true)
+        wishListRepository
+            .removeWishListItem(productId,)
+            .onSuccess {
+                updateLoading(false)
+                updateListAfterRemove(productId)
+            }
+            .onFailure {
+                updateLoading(false)
+                handleException(it)
+            }
+    }
+
+    private fun updateListAfterRemove(productId: String) {
+        _wishList.apply {
+            value?.dropWhile {
+                it.productId == productId
+            }?.let {
+                postValue(it)
+            }
+        }
     }
 }

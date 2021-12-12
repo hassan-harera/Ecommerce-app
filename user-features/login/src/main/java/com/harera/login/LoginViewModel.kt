@@ -2,17 +2,19 @@ package com.harera.login
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
+import com.harera.common.base.BaseViewModel
+import com.harera.common.local.UserDataStore
 import com.harera.common.utils.Validity
-import com.harera.repository.abstraction.repository.AuthManager
+import com.harera.repository.abstraction.UserRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.runBlocking
 import javax.inject.Inject
 
 @HiltViewModel
 class LoginViewModel @Inject constructor(
-    val authManager: com.harera.repository.abstraction.repository.AuthManager,
-) : ViewModel() {
+    private val authManager: UserRepository,
+    userDataStore: UserDataStore,
+) : BaseViewModel(userDataStore) {
     private var _phoneNumber = MutableLiveData<String>("")
     val phoneNumber: LiveData<String> = _phoneNumber
 

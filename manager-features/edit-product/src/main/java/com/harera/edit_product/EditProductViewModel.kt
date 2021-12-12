@@ -4,22 +4,20 @@ import android.graphics.Bitmap
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import com.google.android.gms.tasks.Tasks
 import com.harera.common.base.BaseViewModel
+import com.harera.common.local.UserDataStore
 import com.harera.model.model.Product
-import com.harera.repository.abstraction.UserRepository
 import com.harera.repository.abstraction.ProductRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class EditProductViewModel @Inject constructor(
-    private val authManager: UserRepository,
-    private val productRepository: ProductRepository
-) : BaseViewModel() {
+    private val productRepository: ProductRepository,
+    userDataStore: UserDataStore,
+) : BaseViewModel(userDataStore) {
     private val _productId: MutableLiveData<String> = MutableLiveData()
     val productId: LiveData<String> = _productId
 
@@ -40,24 +38,22 @@ class EditProductViewModel @Inject constructor(
         _image.value = imageBitmap
     }
 
-    private fun uploadProductImage() = viewModelScope.async(Dispatchers.IO) {
-        val task = productRepository.uploadProductImage(
-            product.value!!.productId,
-            image.value!!,
-        )
-        val result = Tasks.await(task)
-        if (task.isSuccessful)
-            result.storage.downloadUrl.let {
-                return@let Tasks.await(it).toString()
-            }.let {
+    private suspend fun uploadProductImage() {
+        productRepository
+            .uploadProductImage(
+                product.value!!.productId,
+                image.value!!,
+            )
+            .onSuccess {
                 setImageUrl(it)
             }
-
-        return@async task.isSuccessful
+            .onFailure {
+                handleException(it)
+            }
     }
 
-    private fun setImageUrl(imageUrl: String) = viewModelScope.launch(Dispatchers.Main) {
-        _imageUrl.value = imageUrl
+    private fun setImageUrl(imageUrl: String) {
+        _imageUrl.postValue(imageUrl)
     }
 
     fun updateProduct() {
@@ -65,31 +61,38 @@ class EditProductViewModel @Inject constructor(
             _operationCompleted.value = true
             return
         }
-        viewModelScope.launch {
-            if (uploadProductImage().await()) {
-                updateProductImage()
-            }
+        viewModelScope.launch(Dispatchers.IO) {
+            uploadProductImage()
+            updateProductImage()
         }
     }
 
-    private fun updateProductImage() {
-        productRepository.uploadProductImage(
-            productId = product.value!!.productId,
-            productImageUrl = imageUrl.value!!,
-        ).addOnSuccessListener {
-            _operationCompleted.value = true
-        }
+    private suspend fun updateProductImage() {
+        productRepository
+            .uploadProductImage(
+                productId = product.value!!.productId,
+                productImageUrl = imageUrl.value!!,
+            )
+            .onSuccess {
+                _operationCompleted.postValue(it)
+            }
+            .onFailure {
+                handleException(it)
+            }
     }
 
-    fun getProduct() {
-        productRepository.getProduct(productId = productId.value!!).addOnSuccessListener {
-            it.toObject(Product::class.java)!!.let {
-                _product.value = it
+    suspend fun getProduct() {
+        productRepository
+            .getProduct(productId = productId.value!!)
+            .onSuccess {
+                _product.postValue(it)
             }
-        }
+            .onFailure {
+                handleException(it)
+            }
     }
 
     fun setProductId(it: String) {
-        _productId.value = it
+        _productId.postValue(it)
     }
 }

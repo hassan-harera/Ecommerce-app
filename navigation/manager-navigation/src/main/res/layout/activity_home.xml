@@ -34,7 +34,7 @@
                         android:layout_margin="3dp"
                         android:contentDescription="@string/image"
                         android:rotation="-5"
-                        android:src="@drawable/apple"
+                        android:src="@drawable/icon"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toStartOf="@+id/app_name"
                         app:layout_constraintTop_toTopOf="parent" />

@@ -5,12 +5,15 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
 import com.harera.common.base.BaseFragment
 import com.harera.common.utils.navigation.Arguments.OFFER_ID
-import com.harera.model.modelget.Offer
-import com.harera.model.modelget.Product
+import com.harera.model.model.Offer
+import com.harera.model.model.Product
 import com.harera.offer.databinding.FragmentOfferViewBinding
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class OfferFragment : BaseFragment() {
     private val offerViewModel: OfferViewModel by viewModels()
@@ -29,7 +32,7 @@ class OfferFragment : BaseFragment() {
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
-        savedInstanceState: Bundle?
+        savedInstanceState: Bundle?,
     ): View {
         super.onCreateView(inflater, container, savedInstanceState)
         bind = FragmentOfferViewBinding.inflate(layoutInflater)
@@ -39,10 +42,9 @@ class OfferFragment : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        offerViewModel.getWishState()
-        offerViewModel.getCartState()
-        offerViewModel.getOffer()
-        offerViewModel.getRelatedOffers()
+        lifecycleScope.launch(Dispatchers.IO) {
+            offerViewModel.getOffer()
+        }
         setupProductsAdapter()
 
         offerViewModel.loading.observe(viewLifecycleOwner) {
@@ -51,6 +53,12 @@ class OfferFragment : BaseFragment() {
 
         offerViewModel.product.observe(viewLifecycleOwner) {
             updateUI(it)
+
+            lifecycleScope.launch(Dispatchers.IO) {
+                offerViewModel.getWishState()
+                offerViewModel.getCartState()
+                offerViewModel.getRelatedOffers()
+            }
         }
 
         offerViewModel.exception.observe(viewLifecycleOwner) {
@@ -61,8 +69,13 @@ class OfferFragment : BaseFragment() {
             updateWishIcon(state = it)
             handleSuccess()
         }
+
         offerViewModel.offers.observe(viewLifecycleOwner) {
             updateProducts(it)
+        }
+
+        connectionLiveData.observe(viewLifecycleOwner) {
+            offerViewModel.updateConnectivity(it)
         }
     }
 
@@ -79,7 +92,7 @@ class OfferFragment : BaseFragment() {
         if (state)
             bind.wish.setImageResource(R.drawable.wished)
         else
-            bind.wish.setImageResource(R.drawable.baseline_favorite_border_white_24dp)
+            bind.wish.setImageResource(R.drawable.wish_24)
     }
 
     private fun updateUI(product: Product) {
@@ -91,11 +104,15 @@ class OfferFragment : BaseFragment() {
 
     private fun setupListener() {
         bind.cart.setOnClickListener {
-            offerViewModel.changeCartState()
+            lifecycleScope.launch(Dispatchers.IO) {
+                offerViewModel.changeCartState()
+            }
         }
 
         bind.wish.setOnClickListener {
-            offerViewModel.changeWishState()
+            lifecycleScope.launch(Dispatchers.IO) {
+                offerViewModel.changeWishState()
+            }
         }
     }
 }

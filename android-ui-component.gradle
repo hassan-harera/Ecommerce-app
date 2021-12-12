@@ -58,7 +58,7 @@ dependencies {
     testImplementation Libs.junit4
 
     implementation project(UiComponents.common)
-    implementation project(Data.repository)
+    api project(Data.repository)
 
     implementation Libs.androidxCore
     implementation Libs.materialDesign

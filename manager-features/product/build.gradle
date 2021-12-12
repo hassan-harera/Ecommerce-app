@@ -4,7 +4,7 @@ dependencies {
     implementation project(UiComponents.image)
     implementation project(UiComponents.product)
     implementation project(UiComponents.common)
-    implementation project(Data.repository)
+    api project(Data.repository)
 
     implementation Libs.liveData
 

@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
 import com.harera.cart_item.CartAdapter
@@ -14,8 +15,10 @@ import com.harera.common.utils.navigation.Arguments
 import com.harera.common.utils.navigation.Destinations
 import com.harera.common.utils.navigation.NavigationUtils
 import com.harera.features.cart.databinding.FragmentCartBinding
-import com.harera.model.modelget.CartItem
+import com.harera.model.model.CartItem
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class CartFragment : BaseFragment() {
@@ -26,7 +29,7 @@ class CartFragment : BaseFragment() {
 
     override fun onCreateView(
         inflater: LayoutInflater,
-        container: ViewGroup?, savedInstanceState: Bundle?
+        container: ViewGroup?, savedInstanceState: Bundle?,
     ): View {
         bind = FragmentCartBinding.inflate(layoutInflater, container, false)
         setupCartAdapter()
@@ -37,10 +40,9 @@ class CartFragment : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        cartViewModel.getCartItems()
 
         cartViewModel.cartList.observe(viewLifecycleOwner) {
-            updateCartList(it.map { it.value })
+            updateCartList(it)
         }
 
         cartViewModel.loading.observe(viewLifecycleOwner) {
@@ -52,12 +54,20 @@ class CartFragment : BaseFragment() {
         }
 
         cartViewModel.cartList.observe(viewLifecycleOwner) {
-            updateCartList(it.map { it.value })
+            updateCartList(it)
+        }
+
+        connectionLiveData.observe(viewLifecycleOwner) {
+            cartViewModel.updateConnectivity(it)
+        }
+
+        lifecycleScope.launch(Dispatchers.IO) {
+            cartViewModel.getCartItems()
         }
     }
 
     private fun updateCartList(cartList: List<CartItem>) {
-        if(cartList.isNotEmpty()) {
+        if (cartList.isNotEmpty()) {
             bind.emptyList.root.visibility = View.INVISIBLE
             bind.carts.visibility = View.VISIBLE
             bind.checkout.visibility = View.VISIBLE
@@ -102,22 +112,31 @@ class CartFragment : BaseFragment() {
     private fun setupCartAdapter() {
         cartAdapter = CartAdapter(
             emptyList(),
-            onRemoveItemClicked = {
-                cartViewModel.removeItem(it)
+            onRemoveItemClicked = { cartItemId ->
+                lifecycleScope.launch(Dispatchers.IO) {
+                    cartViewModel.removeCartItem(cartItemId)
+                }
             },
             onItemClicked = { productId ->
                 viewProduct(productId)
             },
-            onMoveToFavouriteClicked = {
-                cartViewModel.moveToFavourite(it)
+            onMoveToFavouriteClicked = { cartItemId ->
+                lifecycleScope.launch(Dispatchers.IO) {
+                    cartViewModel.moveToFavourite(cartItemId)
+                }
             },
-            onQuantityMinusClicked = {
-                cartViewModel.minusQuantity(it)
+            onQuantityMinusClicked = { cartItemId ->
+                lifecycleScope.launchWhenCreated {
+                    cartViewModel.minusQuantity(cartItemId)
+                }
             },
-            onQuantityPlusClicked = {
-                cartViewModel.plusQuantity(it)
+            onQuantityPlusClicked = { cartItemId ->
+                lifecycleScope.launchWhenCreated {
+                    cartViewModel.plusQuantity(cartItemId)
+                }
             }
         )
+
         bind.carts.setHasFixedSize(true)
         val itemDecorator = DividerItemDecoration(context, DividerItemDecoration.VERTICAL)
         bind.carts.addItemDecoration(itemDecorator)

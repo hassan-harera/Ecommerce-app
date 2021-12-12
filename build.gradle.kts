@@ -1,3 +1,5 @@
+import java.net.URI
+
 buildscript {
     repositories {
         google()
@@ -10,6 +12,7 @@ buildscript {
         classpath(Libs.googleServices)
         classpath(Libs.hiltPlugin)
         classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:1.6.0")
+        classpath(Plugins.sqlDelight)
     }
 }
 

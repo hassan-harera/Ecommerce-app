@@ -125,7 +125,7 @@ class ConfirmLoginActivity : BaseActivity() {
             .setPhoneNumber(phoneNumber)
             .setTimeout(60L, TimeUnit.SECONDS)
             .setActivity(this)
-            .setCallbacks(confirmLoginViewMode.createCallBack())
+            .setCallbacks(confirmLoginViewMode.createCallBack)
             .build()
 
         PhoneAuthProvider.verifyPhoneNumber(options)

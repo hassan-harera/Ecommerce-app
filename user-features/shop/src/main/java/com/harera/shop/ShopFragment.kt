@@ -2,11 +2,11 @@ package com.harera.shop
 
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isNotEmpty
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -14,20 +14,23 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.harera.category_image.CategoriesAdapter
+import com.harera.common.base.BaseFragment
 import com.harera.common.utils.navigation.Arguments
 import com.harera.common.utils.navigation.Destinations
 import com.harera.common.utils.navigation.NavigationUtils
 import com.harera.components.product.ProductsAdapter
-import com.harera.model.modelget.Category
-import com.harera.model.modelget.Offer
-import com.harera.model.modelget.Product
+import com.harera.model.model.Category
+import com.harera.model.model.Offer
+import com.harera.model.model.Product
 import com.harera.shop.databinding.FragmentShopBinding
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 
 @AndroidEntryPoint
-class ShopFragment : Fragment() {
+class ShopFragment : BaseFragment() {
+    private val TAG = "ShopFragment"
 
     private lateinit var shopViewModel: ShopViewModel
     private lateinit var bind: FragmentShopBinding
@@ -110,9 +113,11 @@ class ShopFragment : Fragment() {
         }
         setupListeners()
 
-        shopViewModel.getOffers()
-        shopViewModel.getProducts()
-        shopViewModel.getCategories()
+        lifecycleScope.launch(Dispatchers.IO) {
+            shopViewModel.getOffers()
+            shopViewModel.getProducts()
+            shopViewModel.getCategories()
+        }
     }
 
     private fun setupRecyclerListener() {
@@ -120,10 +125,16 @@ class ShopFragment : Fragment() {
             object : RecyclerView.OnScrollListener() {
                 override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
                     if (bind.products.isNotEmpty() && !bind.products.canScrollVertically(View.SCROLL_AXIS_VERTICAL))
-                        shopViewModel.nextPage()
+                        nextPage()
                 }
             }
         )
+    }
+
+    private fun nextPage() {
+        lifecycleScope.launch {
+            shopViewModel.nextPage()
+        }
     }
 
     private fun setupListeners() {
@@ -169,7 +180,12 @@ class ShopFragment : Fragment() {
         }
 
         shopViewModel.categories.observe(viewLifecycleOwner) {
+            Log.d(TAG, "setupObserves: ${it.size}")
             updateCategories(it)
+        }
+
+        connectionLiveData.observe(viewLifecycleOwner) {
+            shopViewModel.updateConnectivity(it)
         }
     }
 
