@@ -2,6 +2,7 @@ package com.harera.features.cart
 
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -22,7 +23,7 @@ import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class CartFragment : BaseFragment() {
-
+    private val TAG = "CartFragment"
     private val cartViewModel: CartViewModel by viewModels()
     private lateinit var cartAdapter: CartAdapter
     private lateinit var bind: FragmentCartBinding
@@ -53,10 +54,6 @@ class CartFragment : BaseFragment() {
             handleError(it)
         }
 
-        cartViewModel.cartList.observe(viewLifecycleOwner) {
-            updateCartList(it)
-        }
-
         connectionLiveData.observe(viewLifecycleOwner) {
             cartViewModel.updateConnectivity(it)
         }
@@ -67,12 +64,15 @@ class CartFragment : BaseFragment() {
     }
 
     private fun updateCartList(cartList: List<CartItem>) {
+        Log.d(TAG, "out")
         if (cartList.isNotEmpty()) {
+            Log.d(TAG, "is Not Empty")
             bind.emptyList.root.visibility = View.INVISIBLE
             bind.carts.visibility = View.VISIBLE
             bind.checkout.visibility = View.VISIBLE
             cartAdapter.setCartList(cartList)
         } else {
+            Log.d(TAG, "is Empty")
             bind.emptyList.root.visibility = View.VISIBLE
             bind.carts.visibility = View.INVISIBLE
             bind.checkout.visibility = View.INVISIBLE

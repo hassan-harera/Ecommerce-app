@@ -1,7 +1,7 @@
 package com.harera.repository.impl
 
-import com.harera.firebase.abstraction.CartService
 import com.harera.ecommerce.local.LocalDataSource
+import com.harera.firebase.abstraction.CartService
 import com.harera.model.model.CartItem
 import com.harera.repository.abstraction.CartRepository
 import com.harera.repository.abstraction.UserRepository
@@ -80,10 +80,12 @@ class CartRepositoryImpl @Inject constructor(
         }
 
     override suspend fun checkCart(
-        cartItemId: String,
+        productId: String,
+        uid: String,
     ): Result<Boolean> =
         kotlin.runCatching {
-            cartService.checkCartItem(cartItemId)
+            cartService
+                .checkCartItem(productId, uid)
         }
 
     override suspend fun getUserCartItems(

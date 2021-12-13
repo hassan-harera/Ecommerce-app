@@ -73,8 +73,7 @@ class MainActivity : BaseActivity() {
 
 @HiltViewModel
 class MainViewModel @Inject constructor(
-    private val authManager: UserRepository,
-    private val userRepo: UserRepository,
+    private val userRepository: UserRepository,
     userDataStore: UserDataStore,
 ) : BaseViewModel(userDataStore) {
 
@@ -82,13 +81,13 @@ class MainViewModel @Inject constructor(
     val isLoggedIn: MutableLiveData<Boolean> = MutableLiveData(false)
 
     suspend fun checkLogin() {
-        isLoggedIn.value = authManager.getCurrentUser() != null
+        isLoggedIn.value = userRepository.getCurrentUser() != null
     }
 
     fun startDelay() {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             delay(1500)
-            delayEnded.value = true
+            delayEnded.postValue(true)
         }
     }
 }

@@ -69,7 +69,7 @@ class AccountFragment : BaseFragment() {
         accountViewModel.numberValidity.observe(viewLifecycleOwner) { isValid ->
             if (isValid) {
                 handleLoading()
-                lifecycleScope.launch {
+                lifecycleScope.launch(Dispatchers.IO) {
                     delay(500)
                     handleSuccess()
                     goLogin()

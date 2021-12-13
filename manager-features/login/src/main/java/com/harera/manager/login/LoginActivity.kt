@@ -9,6 +9,7 @@ import com.harera.common.base.BaseActivity
 import com.harera.manager.login.databinding.ActivityLoginBinding
 import com.harera.manager_navigation.HomeActivity
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
@@ -78,7 +79,7 @@ class LoginActivity : BaseActivity() {
         }
 
         bind.login.setOnClickListener {
-            lifecycleScope.launch {
+            lifecycleScope.launch(Dispatchers.IO) {
                 loginViewModel.login()
             }
             bind.login.isEnabled = false

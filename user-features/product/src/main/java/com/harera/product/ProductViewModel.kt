@@ -50,7 +50,7 @@ class ProductViewModel @Inject constructor(
             .getProduct(_productId.value!!)
             .onSuccess {
                 _product.postValue(it)
-                getRelatedProducts()
+                getRelatedProducts(it.categoryName)
             }
             .onFailure {
                 handleException(it)
@@ -63,7 +63,7 @@ class ProductViewModel @Inject constructor(
 
     suspend fun getCartState() {
         cartRepository
-            .getCartItem(product.value!!.productId, uid)
+            .getCartItem(productId.value!!, uid)
             .onSuccess {
                 updateCartState(it != null)
                 _cartItem.postValue(it)
@@ -74,15 +74,12 @@ class ProductViewModel @Inject constructor(
     }
 
     private fun updateCartState(state: Boolean) {
-        _cartState.value = state
+        _cartState.postValue(state)
     }
 
     suspend fun getWishState() {
         wishListRepository
-            .getWishItem(
-                product.value!!.productId,
-                uid
-            )
+            .getWishItem(productId.value!!, uid)
             .onSuccess {
                 updateWishState(it != null)
                 _wishItem.postValue(it)
@@ -97,16 +94,38 @@ class ProductViewModel @Inject constructor(
     }
 
     suspend fun changeCartState() {
-        if (cartState.value!!) {
-            removeCartItem(cartItem.value!!.cartItemId)
+        cartRepository
+            .getCartItem(productId.value!!, uid)
+            .onSuccess {
+                changeCartState(it)
+            }
+            .onFailure {
+                handleException(it)
+            }
+    }
+
+    private suspend fun changeCartState(cartState: CartItem?) {
+        if (cartState != null) {
+            removeCartItem(cartState.cartItemId)
         } else {
             addCartItem()
         }
     }
 
     suspend fun changeWishState() {
-        if (wishState.value!!) {
-            removeWishItem(wishItem.value!!.wishItemId)
+        wishListRepository
+            .getWishItem(productId.value!!, uid)
+            .onSuccess {
+                changeWishState(it)
+            }
+            .onFailure {
+                handleException(it)
+            }
+    }
+
+    private suspend fun changeWishState(wishState: WishItem?) {
+        if (wishState != null) {
+            removeWishItem(wishState.wishItemId)
         } else {
             addWishItem()
         }
@@ -116,7 +135,7 @@ class ProductViewModel @Inject constructor(
         wishListRepository
             .removeWishListItem(wishItemId)
             .onSuccess {
-                updateWishState(it)
+                updateWishState(it.not())
             }.onFailure {
                 handleException(it)
             }
@@ -160,7 +179,7 @@ class ProductViewModel @Inject constructor(
         cartRepository
             .addCartItem(item)
             .onSuccess {
-                updateCartState(true)
+                updateCartState(it)
             }
             .onFailure {
                 handleException(it)
@@ -171,16 +190,16 @@ class ProductViewModel @Inject constructor(
         cartRepository
             .removeCartItem(cartItemId)
             .onSuccess {
-                updateCartState(it)
+                updateCartState(it.not())
             }
             .onFailure {
                 handleException(it)
             }
     }
 
-    suspend fun getRelatedProducts() {
+    private suspend fun getRelatedProducts(categoryName: String) {
         categoryRepository
-            .getCategoryProducts(product.value!!.categoryName)
+            .getCategoryProducts(categoryName)
             .onSuccess {
                 _products.postValue(it)
             }

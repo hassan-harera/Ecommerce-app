@@ -10,6 +10,7 @@ import com.harera.model.model.Product
 import com.harera.repository.abstraction.ProductRepository
 import com.harera.repository.abstraction.UserRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -76,7 +77,7 @@ class AddProductViewModel @Inject constructor(
             _operationCompleted.value = true
             return
         }
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             uploadProductImage()
             updateProductImage()
         }

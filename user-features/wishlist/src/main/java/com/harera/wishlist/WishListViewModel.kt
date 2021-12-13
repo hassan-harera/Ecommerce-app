@@ -12,6 +12,7 @@ import com.harera.repository.abstraction.ProductRepository
 import com.harera.repository.abstraction.UserRepository
 import com.harera.repository.abstraction.WishListRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.joda.time.DateTime
 import javax.inject.Inject
@@ -43,7 +44,7 @@ class WishListViewModel @Inject constructor(
     }
 
     fun addWishItemToCart(productId: String) {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             updateLoading(true)
             removeWishItem(productId = productId)
             addCartItem(productId = productId)

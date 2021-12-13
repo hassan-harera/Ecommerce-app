@@ -14,7 +14,7 @@ import javax.inject.Inject
 class AccountViewModel @Inject constructor(
     private val authManager: UserRepository,
     private val userRepository: UserRepository,
-    userDataStore: UserDataStore
+    userDataStore: UserDataStore,
 ) : BaseViewModel(userDataStore) {
 
     private var _userIsAnonymous = MutableLiveData<Boolean>()
@@ -29,12 +29,8 @@ class AccountViewModel @Inject constructor(
     private var _userImage = MutableLiveData<Bitmap>()
     val userImage: LiveData<Bitmap> = _userImage
 
-    fun getUser() {
-
-    }
-
     suspend fun checkUser() {
-        _userIsAnonymous.value = authManager.getCurrentUser()!!.isAnonymous
+        _userIsAnonymous.postValue(authManager.getCurrentUser()!!.isAnonymous)
     }
 
     fun setProfileImage(imageBitmap: Bitmap) {

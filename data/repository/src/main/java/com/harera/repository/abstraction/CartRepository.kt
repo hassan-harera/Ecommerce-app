@@ -30,7 +30,7 @@ interface CartRepository {
         forceRefresh: Boolean = true,
     ): Result<CartItem?>
 
-    suspend fun checkCart(cartItemId: String): Result<Boolean>
+    suspend fun checkCart(productId: String, uid: String,): Result<Boolean>
 
     suspend fun removeCartItem(cartItemId: String): Result<Boolean>
     suspend fun getCartItem(productId: String, uid: String): Result<CartItem?>

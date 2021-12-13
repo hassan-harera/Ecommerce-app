@@ -10,6 +10,6 @@ interface CartService {
     suspend fun getUserCartItems(uid: String): List<CartItem>
     suspend fun updateItemUid(cartItemId: String, uid: String): Boolean
     suspend fun getCartItem(cartItemId: String): CartItem?
-    suspend fun checkCartItem(cartItemId: String): Boolean
+    suspend fun checkCartItem(productId: String, uid: String): Boolean
     suspend fun getCartItem(productId: String, uid: String): CartItem?
 }

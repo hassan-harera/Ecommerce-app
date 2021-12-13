@@ -47,12 +47,6 @@ class ProductFragment : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        lifecycleScope.launch(Dispatchers.IO) {
-            productViewModel.getWishState()
-            productViewModel.getCartState()
-        }
-
         setupProductsAdapter()
 
         lifecycleScope.launch(Dispatchers.IO) {
@@ -71,6 +65,10 @@ class ProductFragment : BaseFragment() {
             handleSuccess()
             updateUI(it)
 
+            lifecycleScope.launch(Dispatchers.IO) {
+                productViewModel.getWishState()
+                productViewModel.getCartState()
+            }
         }
 
         productViewModel.exception.observe(viewLifecycleOwner) {
@@ -81,8 +79,13 @@ class ProductFragment : BaseFragment() {
             updateWishIcon(state = it)
             handleSuccess()
         }
+
         productViewModel.products.observe(viewLifecycleOwner) {
             updateProducts(it)
+        }
+
+        productViewModel.cartItem.observe(viewLifecycleOwner) {
+            bind.cart.isExpanded = true
         }
 
         connectionLiveData.observe(viewLifecycleOwner) {
@@ -116,15 +119,23 @@ class ProductFragment : BaseFragment() {
 
     private fun setupListener() {
         bind.cart.setOnClickListener {
-            lifecycleScope.launch(Dispatchers.IO) {
-                productViewModel.changeCartState()
-            }
+            changeCartState()
         }
 
         bind.wish.setOnClickListener {
-            lifecycleScope.launch(Dispatchers.IO) {
-                productViewModel.changeWishState()
-            }
+            changeWishState()
+        }
+    }
+
+    private fun changeWishState() {
+        lifecycleScope.launch(Dispatchers.IO) {
+            productViewModel.changeWishState()
+        }
+    }
+
+    private fun changeCartState() {
+        lifecycleScope.launch(Dispatchers.IO) {
+            productViewModel.changeCartState()
         }
     }
 }

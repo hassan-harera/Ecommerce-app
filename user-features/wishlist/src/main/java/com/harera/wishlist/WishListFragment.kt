@@ -66,10 +66,6 @@ class WishListFragment : BaseFragment() {
         setupAdapter()
         setupListeners()
 
-        lifecycleScope.launch(Dispatchers.IO) {
-            wishListViewModel.getWishListItems()
-        }
-
         wishListViewModel.wishList.observe(viewLifecycleOwner) {
             updateWishList(it)
         }
@@ -82,9 +78,12 @@ class WishListFragment : BaseFragment() {
             handleError(it)
         }
 
-
         connectionLiveData.observe(viewLifecycleOwner) {
             wishListViewModel.updateConnectivity(it)
+        }
+
+        lifecycleScope.launch(Dispatchers.IO) {
+            wishListViewModel.getWishListItems()
         }
     }
 

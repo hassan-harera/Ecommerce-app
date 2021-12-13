@@ -108,9 +108,7 @@ class ShopFragment : BaseFragment() {
         setupOffersAdapter()
         setupProductsAdapter()
         setupCategoriesAdapter()
-        lifecycleScope.launch {
-            setupObserves()
-        }
+        setupObserves()
         setupListeners()
 
         lifecycleScope.launch(Dispatchers.IO) {
@@ -132,7 +130,7 @@ class ShopFragment : BaseFragment() {
     }
 
     private fun nextPage() {
-        lifecycleScope.launch {
+        lifecycleScope.launch(Dispatchers.IO) {
             shopViewModel.nextPage()
         }
     }

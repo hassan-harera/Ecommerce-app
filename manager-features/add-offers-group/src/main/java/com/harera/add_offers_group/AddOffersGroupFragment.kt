@@ -15,6 +15,7 @@ import com.harera.common.afterTextChanged
 import com.harera.common.base.BaseFragment
 import com.harera.common.utils.BitmapUtils
 import com.opensooq.supernova.gligar.GligarPicker
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class AddOffersGroupFragment : BaseFragment() {
@@ -87,7 +88,7 @@ class AddOffersGroupFragment : BaseFragment() {
 
         bind.add.setOnClickListener {
             bind.add.isEnabled = false
-            lifecycleScope.launch {
+            lifecycleScope.launch(Dispatchers.IO) {
                 addCategoryViewModel.submitForm()
             }
         }

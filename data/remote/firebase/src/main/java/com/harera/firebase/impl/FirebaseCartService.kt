@@ -3,10 +3,8 @@ package com.harera.firebase.impl
 import com.google.android.gms.tasks.Tasks
 import com.google.firebase.firestore.FirebaseFirestore
 import com.harera.firebase.abstraction.CartService
-import com.harera.firebase.abstraction.DBConstants
 import com.harera.firebase.abstraction.DBConstants.CART
 import com.harera.model.model.CartItem
-import com.harera.model.model.WishItem
 import javax.inject.Inject
 
 class FirebaseCartService @Inject constructor(
@@ -29,20 +27,11 @@ class FirebaseCartService @Inject constructor(
     override suspend fun removeCartItem(cartItemId: String): Boolean =
         fStore
             .collection(CART)
-            .whereEqualTo(CartItem::cartItemId.name, cartItemId)
-            .get()
+            .document(cartItemId)
+            .delete()
             .let {
-                Tasks.await(it).documents.first().id
-            }
-            .let { documentId ->
-                fStore
-                    .collection(CART)
-                    .document(documentId)
-                    .delete()
-                    .let {
-                        Tasks.await(it)
-                        it.isSuccessful
-                    }
+                Tasks.await(it)
+                it.isSuccessful
             }
 
     override suspend fun updateQuantity(cartItemId: String, quantity: Int): Boolean =
@@ -74,13 +63,14 @@ class FirebaseCartService @Inject constructor(
                 Tasks.await(it).toObject(CartItem::class.java)
             }
 
-    override suspend fun checkCartItem(cartItemId: String): Boolean =
+    override suspend fun checkCartItem(productId: String, uid: String): Boolean =
         fStore
             .collection(CART)
-            .document(cartItemId)
+            .whereEqualTo(CartItem::uid.name, uid)
+            .whereEqualTo(CartItem::productId.name, productId)
             .get()
             .let {
-                Tasks.await(it).exists()
+                Tasks.await(it).documents.isNotEmpty()
             }
 
     override suspend fun getUserCartItems(uid: String): List<CartItem> =

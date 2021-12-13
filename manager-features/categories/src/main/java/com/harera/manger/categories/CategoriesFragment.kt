@@ -19,6 +19,7 @@ import com.harera.components.product.ProductsAdapter
 import com.harera.manger.categories.databinding.FragmentCategoriesBinding
 import com.harera.model.model.Category
 import com.harera.model.model.Product
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class CategoriesFragment : BaseFragment() {
@@ -80,7 +81,7 @@ class CategoriesFragment : BaseFragment() {
 
         setupObservers()
 
-        lifecycleScope.launch {
+        lifecycleScope.launch(Dispatchers.IO) {
             categoriesViewModel.getCategories()
             categoriesViewModel.getProducts()
         }
@@ -104,7 +105,7 @@ class CategoriesFragment : BaseFragment() {
         }
 
         categoriesViewModel.categoryName.observe(viewLifecycleOwner) {
-            lifecycleScope.launch {
+            lifecycleScope.launch(Dispatchers.IO) {
                 categoriesViewModel.getProducts()
             }
         }

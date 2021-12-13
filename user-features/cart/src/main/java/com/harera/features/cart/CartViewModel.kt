@@ -19,7 +19,6 @@ class CartViewModel @Inject constructor(
     private val cartRepository: CartRepository,
     private val wishListRepository: WishListRepository,
     private val authManager: UserRepository,
-    private val productRepository: ProductRepository,
     userDataStore: UserDataStore,
 ) : BaseViewModel(userDataStore) {
 
