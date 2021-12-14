@@ -162,4 +162,5 @@
     <string name="offers_group">اسم قائمة العروض</string>
     <string name="is_required">Is Required</string>
     <string name="add_offers_group">Add Offers Group</string>
+    <string name="pound">ج.م</string>
 </resources>

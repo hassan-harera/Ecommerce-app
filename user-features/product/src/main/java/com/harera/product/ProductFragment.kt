@@ -15,6 +15,7 @@ import com.harera.model.model.Product
 import com.harera.product.databinding.FragmentProductViewBinding
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlin.text.Typography.pound
 
 class ProductFragment : BaseFragment() {
     private val productViewModel: ProductViewModel by viewModels()
@@ -111,7 +112,7 @@ class ProductFragment : BaseFragment() {
 
     private fun updateUI(product: Product) {
         bind.title.text = product.title
-        bind.price.text = "${product.price} EGP"
+        bind.price.text = "${product.price} ${getString(R.string.pound)}"
         bind.productPics.adapter = ProductPicturesAdapter(product.productPictureUrls)
 
         setupListener()
