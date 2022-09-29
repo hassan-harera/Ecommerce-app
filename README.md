@@ -1,7 +1,10 @@
-# Hyper-Panda
+# Ecommerce app
+<a href="https://play.google.com/store/apps/details?id=com.harera.hyperpanda"><img class="alignnone" src="https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png" alt="Get it on Google Play" width="219" height="90" /></a>
 ![GitHub Cards Preview](https://github.com/hassan0shaban/Hyper-Panda/raw/master/demo/screesnshots_group.png)
 
-Hyper Panda is an Ecommerce App for <a href="https://www.facebook.com/HyperPandaBaba">Hyper Panda Market</a>, The Application is used for manging, and marketing that brand. It contains 3000+ product, 40+ categories. 
+User module app provides showing products, categories, orders, market location, cart item list, wish item list, offer groups, offers for every group.
+Manager module app provides adding new products, editing products, adding new categories, and other bunch of stuff.
+The app contains 3000+ product, 40+ categories.
 
 
 ### Tech Stack 🚀
@@ -38,7 +41,7 @@ Hyper Panda is an Ecommerce App for <a href="https://www.facebook.com/HyperPanda
 - Track Visitings
 
 ## Screenshots
-![Image](DEV/github/screenshots_combined.jpg)
+
 
 # Upcoming features
 - Cart CheckOut

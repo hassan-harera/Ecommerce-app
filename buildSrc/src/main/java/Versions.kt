@@ -26,7 +26,7 @@ object Versions {
     const val LEGACY_VERSION = "1.0.0"
 
     const val KOTLIN_VERSION = "1.5.30"
-    const val HILT_VERSION = "2.37"
+    const val HILT_VERSION = "2.44"
     const val NAV_VERSION = "2.3.1"
     const val COROUTINES_VERSION = "1.5.0"
     const val GRADLE_TOOLS_VERSION = "7.0.2"
@@ -34,7 +34,7 @@ object Versions {
     const val Jvm_TARGET = "4.3.10"
 
     const val FRAGMENT_VERSION = "1.3.3"
-    const val LIFECYCLE_VERSION = "2.3.1"
+    const val LIFECYCLE_VERSION = "2.5.1"
     const val JETPACK_NAVIGATION_VERSION = "2.3.5"
 
     const val RETROFIT_VERSION = "2.9.0"
