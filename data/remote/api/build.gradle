@@ -2,6 +2,16 @@ apply from:"$rootDir/android-library.gradle"
 apply plugin: 'com.google.gms.google-services'
 apply plugin: ("dagger.hilt.android.plugin")
 
+android {
+
+    packagingOptions {
+        resources {
+            excludes += ['META-INF/DEPENDENCIES', 'META-INF/LICENSE', 'META-INF/LICENSE.txt', 'META-INF/license.txt', 'META-INF/NOTICE', 'META-INF/NOTICE.txt', 'META-INF/notice.txt', 'META-INF/ASL2.0', 'META-INF/LGPL2.1', 'META-INF/AL2.0', 'META-INF/*.kotlin_module', 'META-INF/proguard/androidx-annotations.pro']
+        }
+    }
+    namespace 'com.harera.api'
+}
+
 dependencies {
     //hilt
     kapt(Libs.hiltAndroidCompiler)
