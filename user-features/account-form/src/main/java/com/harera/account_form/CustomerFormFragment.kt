@@ -127,7 +127,7 @@ class CustomerFormFragment : BaseFragment() {
     }
 
     private fun updateLocation(location: LatLng) {
-        val geocoder = Geocoder(context, Locale.getDefault())
+        val geocoder = Geocoder(requireContext(), Locale.getDefault())
         try {
             bind.location.text = LocationUtils.getLocationAddressName(location.latitude, location.longitude, geocoder)
         } catch (e: IOException) {

@@ -13,7 +13,7 @@ class LocationUtils {
                     map[LocationConstants.latitude]!!,
                     map[LocationConstants.longitude]!!,
                     1
-                )
+                ) ?: return null
                 val address = addresses[0]
                 return "${address.subAdminArea},${address.adminArea},${address.countryName}"
             } catch (exception: IOException) {
@@ -28,7 +28,7 @@ class LocationUtils {
             geocoder: Geocoder
         ): String? {
             try {
-                val addresses = geocoder.getFromLocation(latitude, longitude, 1)
+                val addresses = geocoder.getFromLocation(latitude, longitude, 1) ?: return null
                 val address = addresses[0]
                 return "${address.subAdminArea},${address.adminArea},${address.countryName}"
             } catch (exception: IOException) {
