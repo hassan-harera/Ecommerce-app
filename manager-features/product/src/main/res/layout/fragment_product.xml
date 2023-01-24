@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    android:theme="@style/HyperPanda"
+    android:theme="@style/Theme.App"
     tools:context="com.harera.manger.product.ProductFragment">
 
     <com.google.android.material.appbar.AppBarLayout
@@ -57,7 +57,7 @@
                     android:layout_height="35dp"
                     android:layout_margin="5dp"
                     android:background="@color/transparent_selected"
-                    android:src="@drawable/wish_24"
+                    android:src="@drawable/ic_love"
                     app:layout_constraintBottom_toBottomOf="@+id/product_pics"
                     app:layout_constraintStart_toStartOf="parent"
                     app:tint="@color/green" />
@@ -68,12 +68,12 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_marginHorizontal="8dp"
+                    android:background="@color/transparent_selected"
                     android:backgroundTint="@color/transparent_selected"
-                    android:fontFamily="@font/abeezee"
+                    android:fontFamily="@font/roboto"
                     android:padding="5dp"
                     android:textColor="@color/white"
                     android:textSize="20sp"
-                    android:background="@color/transparent_selected"
                     android:textStyle="normal"
                     app:layout_constraintBottom_toBottomOf="@+id/wish"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -102,7 +102,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="end"
                 android:layout_margin="8dp"
-                android:fontFamily="@font/el_messiri_bold"
+                android:fontFamily="@font/roboto"
                 android:padding="5dp"
                 android:text="@string/available_in_hyper_panda"
                 android:textColor="#000"
@@ -145,7 +145,7 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="8dp"
                 android:backgroundTint="@color/green_300"
-                android:fontFamily="@font/el_messiri_bold"
+                android:fontFamily="@font/roboto"
                 android:gravity="center"
                 android:paddingVertical="8dp"
                 android:text="@string/add_to_cart"
@@ -160,7 +160,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="end"
                 android:layout_margin="8dp"
-                android:fontFamily="@font/el_messiri_bold"
+                android:fontFamily="@font/roboto"
                 android:padding="5dp"
                 android:text="@string/similar_products"
                 android:textColor="#000"
@@ -177,14 +177,14 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/suggestions_label"
                 app:layout_constraintVertical_weight="1"
-                tools:listitem="@layout/card_view_category_product" />
+                tools:listitem="@layout/card_view_product" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/edit"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="8dp"
-                android:fontFamily="@font/el_messiri_bold"
+                android:fontFamily="@font/roboto"
                 android:gravity="center"
                 android:paddingVertical="8dp"
                 android:text="@string/edit"

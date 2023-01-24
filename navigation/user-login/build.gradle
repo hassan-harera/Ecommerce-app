@@ -1,0 +1,13 @@
+apply from: "$rootDir/${CommonBuild.NavigationModule}"
+
+android {
+    namespace 'com.harera.navigation.userlogin'
+}
+dependencies {
+    api(project(Feature.LOGIN))
+    api(project(Base.COMMON))
+
+    implementation(Libs.navigationFragment)
+    implementation(Libs.navigationUi)
+}
+

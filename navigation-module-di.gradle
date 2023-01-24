@@ -1,0 +1,33 @@
+apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-kapt'
+
+android {
+    compileSdkVersion DefaultConfig.compileSdk
+
+    defaultConfig {
+        minSdkVersion DefaultConfig.minSdk
+        targetSdkVersion DefaultConfig.targetSdk
+        versionCode Releases.versionCode
+        versionName Releases.versionName
+    }
+    buildFeatures{
+        viewBinding true
+    }
+}
+
+dependencies {
+    api project(Base.COMMON)
+
+    implementation(Libs.appcompat)
+    implementation(Libs.activity)
+    implementation(Libs.fragments)
+    implementation(Libs.navigationFragment)
+
+    implementation Libs.liveData
+    implementation Libs.androidxCore
+
+    implementation Libs.materialDesign
+    implementation Libs.lifeCycleRuntime
+
+}

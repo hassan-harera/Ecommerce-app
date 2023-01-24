@@ -5,7 +5,7 @@ plugins {
 }
 apply plugin: 'kotlin-kapt'
 apply plugin: "androidx.navigation.safeargs"
-apply plugin: 'dagger.hilt.android.plugin'
+apply from:"$rootDir/${CommonBuild.HILT_MODULE}"
 android {
     compileSdkVersion DefaultConfig.compileSdk
     buildToolsVersion DefaultConfig.buildToolsVersion
@@ -47,28 +47,7 @@ android {
 }
 
 dependencies {
-    //modules
-    implementation project(UiComponents.common)
     implementation project(Navigation.manager)
     implementation project(ManagerFeatures.login)
-
-    //hilt
-    implementation Libs.hiltAndroid
-    kapt(Libs.hiltAndroidCompiler)
-
-    implementation(Libs.playServicesTasks)
-
-    implementation(Libs.androidxCore)
-    implementation(Libs.appcompat)
-    implementation(Libs.activity)
-
-    implementation(Libs.navigationFragment)
-    implementation(Libs.navigationUi)
-
-    implementation(Libs.materialDesign)
-    implementation(Libs.circleImage)
-
-    implementation(Libs.liveData)
-    implementation(Libs.viewModels)
-    kapt(Libs.lifeCycleCompiler)
+    implementation project(ManagerFeatures.SPLASH)
 }

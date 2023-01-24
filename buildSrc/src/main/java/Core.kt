@@ -1,5 +1,4 @@
 object Core {
-    const val model = ":data:model"
     const val remote = ":data:remote"
     const val repository = ":data:repository"
     const val local = ":data:local"

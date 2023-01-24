@@ -28,11 +28,14 @@ import com.google.android.libraries.places.api.net.PlacesClient
 import com.harera.choose_location.databinding.ActivityChooseLocationBinding
 import com.harera.common.base.BaseActivity
 import com.harera.common.onSearchConfirmed
-import com.harera.common.utils.navigation.Arguments
+import com.harera.common.navigation.utils.Arguments
+import dagger.hilt.android.AndroidEntryPoint
 import java.io.IOException
-import java.util.*
 
+
+@AndroidEntryPoint
 class ChooseLocationActivity : BaseActivity(), OnMapReadyCallback {
+
     private val DEFAULT_ZOOM = 15f
     private var lastKnownLocation: Location? = null
     private lateinit var map: GoogleMap

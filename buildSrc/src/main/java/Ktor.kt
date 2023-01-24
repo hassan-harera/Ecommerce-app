@@ -8,4 +8,6 @@ object Ktor {
 
     const val ktorClientSerialization = ("io.ktor:ktor-client-serialization:$ktor_version")
     const val ktorClientGson = ("io.ktor:ktor-client-gson:$ktor_version")
+
+    const val Serializer = "org.jetbrains.kotlinx:kotlinx-serialization-json:1.3.0"
 }

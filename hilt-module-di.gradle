@@ -1,0 +1,14 @@
+apply plugin: ("dagger.hilt.android.plugin")
+
+dependencies {
+    //hilt
+    kapt(Libs.hiltAndroidCompiler)
+    implementation(Libs.hiltAndroid)
+    implementation Testing.testRunner
+
+    androidTestImplementation(Testing.hiltTesting)
+    kaptAndroidTest(Libs.hiltAndroidCompiler)
+
+    testImplementation(Testing.hiltTesting)
+    kaptTest(Libs.hiltAndroidCompiler)
+}

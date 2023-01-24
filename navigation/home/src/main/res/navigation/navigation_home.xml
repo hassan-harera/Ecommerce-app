@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_main"
+    app:startDestination="@id/navigation_home">
+
+    <fragment
+        android:id="@+id/navigation_home"
+        android:name="com.englizya.home_screen.HomeFragment"
+        tools:layout="@layout/fragment_home">
+
+        <argument android:name="phoneNumber" />
+        <deepLink app:uri="Ecommerce://home/{phoneNumber}" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/navigation_map"
+        android:name="com.englizya.map.MapFragment"
+        tools:layout="@layout/fragment_map" />
+
+    <fragment
+        android:id="@+id/navigation_routes"
+        android:name="com.englizya.route.RouteFragment"
+        tools:layout="@layout/fragment_route" />
+
+    <fragment
+        android:id="@+id/navigation_qr"
+        android:name="com.englizya.qr.ScanFragment"
+        tools:layout="@layout/fragment_scan_qr" />
+
+    <fragment
+        android:id="@+id/navigation_profile"
+        android:name="com.englizya.profile.ProfileFragment"
+        tools:layout="@layout/fragment_profile">
+
+        <deepLink app:uri="Ecommerce://profile" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/navigation_settings"
+        android:name="com.englizya.app_settings.SettingsFragment"
+        tools:layout="@layout/fragment_app_settings">
+
+        <deepLink app:uri="Ecommerce://settings" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/navigation_user_tickets"
+        android:name="com.englizya.user_tickets.UserTicketsFragment"
+        tools:layout="@layout/fragment_user_tickets">
+
+        <deepLink app:uri="Ecommerce://user-tickets" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/navigation_driver_review"
+        android:name="com.englyzia.reviewdriver.DriverReviewFragment"
+        tools:layout="@layout/fragment_driver_review">
+
+        <deepLink app:uri="Ecommerce://review-driver" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/navigation_complaint"
+        android:name="com.englizya.complaint.ComplaintFragment"
+        tools:layout="@layout/fragment_driver_review">
+
+        <deepLink app:uri="Ecommerce://insert-complaint" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/navigation_term_and_conditions"
+        android:name="com.englizya.terms_conditions.TermsAndConditionsFragment"
+        tools:layout="@layout/fragment_terms_and_conditions">
+
+        <deepLink app:uri="Ecommerce://terms-and-conditions" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/navigation_contact_us"
+        android:name="com.englizya.contact_us.ContactUsFragment"
+        tools:layout="@layout/fragment_contact_us">
+
+        <deepLink app:uri="Ecommerce://contact-us" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/navigation_about_us"
+        android:name="com.englizya.about_us.AboutUsFragment"
+        tools:layout="@layout/fragment_about_us">
+
+        <deepLink app:uri="Ecommerce://about-us" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/navigation_privacy_policy"
+        android:name="com.englizya.privacy_policy.PrivacyPolicyFragment"
+        tools:layout="@layout/fragment_privacy_policy">
+
+        <deepLink app:uri="Ecommerce://privacy-policy" />
+    </fragment>
+    <fragment
+        android:id="@+id/navigation_profile_settings"
+        android:name="com.englizya.profile_settings.ProfileSettingsFragment"
+        tools:layout="@layout/fragment_profile_settings">
+
+        <deepLink app:uri="Ecommerce://profile_settings" />
+    </fragment>
+    <fragment
+        android:id="@+id/navigation_internal_search"
+        android:name="com.englizya.internal_search.InternalSearchFragment"
+        tools:layout="@layout/fragment_internal_search">
+
+        <deepLink app:uri="Ecommerce://internal_search" />
+    </fragment>
+    <fragment
+        android:id="@+id/navigation_internal_routes_details"
+        android:name="com.englizya.route.InternalRoutesDetailsFragment"
+        tools:layout="@layout/fragment_internal_routes_details">
+        <argument android:name="cityName" />
+        <deepLink app:uri="Ecommerce://internal-routes-details/{cityName}" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/navigation_internal_search_result"
+        android:name="com.englizya.internal_search.InternalSearchResultFragment"
+        tools:layout="@layout/fragment_internal_search_result">
+
+        <deepLink app:uri="Ecommerce://internal_search_result" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/navigation_offers"
+        android:name="com.englizya.offers.OffersFragment"
+        tools:layout="@layout/fragment_offers">
+
+        <deepLink app:uri="Ecommerce://offers" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/navigation_offers_details"
+        android:name="com.englizya.offers.OfferFragment"
+        tools:layout="@layout/fragment_offer_details">
+        <argument android:name="offerId" />
+        <deepLink app:uri="Ecommerce://offer-details/{offerId}" />
+    </fragment>
+
+
+    <fragment
+        android:id="@+id/navigation_announcement"
+        android:name="com.englizya.announcement.AnnouncementsFragment"
+        tools:layout="@layout/fragment_announcement">
+
+        <deepLink app:uri="Ecommerce://announcement" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/navigation_announcement_details"
+        android:name="com.englizya.announcement.AnnouncementFragment"
+        tools:layout="@layout/fragment_announcement_details">
+
+        <argument android:name="announcementId" />
+        <deepLink app:uri="Ecommerce://announcement-details/{announcementId}" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/navigation_recharging"
+        android:name="com.englizya.charging.RechargingFragment"
+        tools:layout="@layout/fragment_recharging">
+
+        <argument android:name="redirect" />
+        <deepLink app:uri="Ecommerce://recharging/{redirect}" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/navigation_refund_policy"
+        android:name="com.englizya.terms_conditions.RefundFragment"
+        tools:layout="@layout/fragment_refund">
+
+        <deepLink app:uri="Ecommerce://refund-policy" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/navigation_ticket_details"
+        android:name="com.englizya.feature.ticket.TicketDetailsFragment"
+        tools:layout="@layout/fragment_ticket_details">
+
+        <argument android:name="ticketId" />
+        <deepLink app:uri="Ecommerce://ticket-details/{ticketId}" />
+    </fragment>
+
+</navigation>

@@ -1,0 +1,27 @@
+apply from: "$rootDir/${CommonBuild.FeatureModule}"
+android {
+
+    packagingOptions {
+        resources {
+            excludes += ['META-INF/DEPENDENCIES', 'META-INF/LICENSE', 'META-INF/LICENSE.txt', 'META-INF/license.txt', 'META-INF/NOTICE', 'META-INF/NOTICE.txt', 'META-INF/notice.txt', 'META-INF/ASL2.0', 'META-INF/LGPL2.1', 'META-INF/AL2.0', 'META-INF/*.kotlin_module', 'META-INF/proguard/androidx-annotations.pro']
+        }
+    }
+    namespace 'com.harera.product'
+}
+
+dependencies {
+    implementation Libs.picasso
+
+    implementation Libs.adMob
+    implementation Libs.firebaseFirestore
+    implementation Libs.firebaseAuth
+    implementation Libs.viewModels
+    implementation Libs.navigationUi
+    implementation Libs.navigationFragment
+
+    implementation Libs.liveData
+    kapt(Libs.hiltAndroidCompiler)
+    implementation(Libs.hiltAndroid)
+    implementation Libs.lifeCycleRuntime
+    implementation Libs.playServicesTasks
+}

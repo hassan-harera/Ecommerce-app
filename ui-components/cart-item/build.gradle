@@ -1,4 +1,4 @@
-apply from:"$rootDir/android-ui-component.gradle"
+apply from: "$rootDir/${CommonBuild.FeatureModule}"
 
 android {
 

@@ -1,0 +1,11 @@
+apply from:"$rootDir/${BuildGradle.DataModule}"
+apply from:"$rootDir/${CommonBuild.HILT_MODULE}"
+apply from:"$rootDir/${CommonBuild.FIREBASE_MODULE}"
+
+android {
+    namespace 'com.harera.service'
+}
+
+dependencies {
+
+}

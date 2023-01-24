@@ -1,0 +1,16 @@
+apply from: "$rootDir/${CommonBuild.DATA_MODULE}"
+apply from: "$rootDir/${CommonBuild.TESTING_MODULE}"
+
+android {
+    defaultConfig {
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+    namespace 'com.englizya.datastore'
+}
+
+dependencies {
+    implementation(Libs.truth)
+    testImplementation(Libs.truth)
+
+
+}

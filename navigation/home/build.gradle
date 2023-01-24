@@ -1,0 +1,42 @@
+apply from: "$rootDir/${CommonBuild.FeatureModule}"
+apply from: "$rootDir/${CommonBuild.UI_TESTING_MODULE}"
+apply from: "$rootDir/${CommonBuild.TESTING_MODULE}"
+
+dependencies {
+    api(project(Feature.HOME))
+    api(project(Feature.PRIVACY_POLICY))
+    api(project(Feature.LINE_MAP))
+    api(project(Feature.ROUTE))
+    api(project(Feature.TICKET))
+    api(project(Feature.MAP))
+    api(project(Feature.SCAN_QR))
+    api(project(Feature.APP_SETTINGS))
+    api(project(Feature.PROFILE))
+    api(project(Feature.COMPLAINT))
+    api(project(Feature.SUGGESTION))
+    api(project(Feature.DRIVER_REVIEW))
+    api(project(Feature.USER_TICKETS))
+    api(project(Feature.TERMS_AND_CONDITIONS))
+    api(project(Feature.CONTACT_US))
+    api(project(Feature.ABOUT_US))
+    api(project(Feature.OFFERS))
+    api(project(Feature.ANNOUNCEMENT))
+    api(project(Feature.PROFILE_SETTINGS))
+    api(project(Feature.INTERNAL_SEARCH))
+
+    api(project(Feature.RECHARGING))
+    api(project(Navigation.BOOKING))
+
+
+    api(project(Base.COMMON))
+
+    api(project(UiComponents.NAVIGATION))
+
+
+    implementation(Libs.navigationFragment)
+    implementation(Libs.navigationUi)
+}
+
+android {
+    namespace 'com.englizya.feature.ticket.navigation.home'
+}

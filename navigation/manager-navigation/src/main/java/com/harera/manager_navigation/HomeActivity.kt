@@ -5,7 +5,9 @@ import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import com.harera.common.base.BaseActivity
 import com.harera.manager_navigation.databinding.ActivityHomeBinding
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class HomeActivity : BaseActivity() {
     private lateinit var navController: NavController
     private lateinit var bind: ActivityHomeBinding

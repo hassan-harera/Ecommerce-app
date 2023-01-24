@@ -58,9 +58,24 @@ object Versions {
 
     const val ANDROIDX_CORE_VERSION = "1.3.2"
     const val ANDROIDX_APP_COMPAT_VERSION = "1.3.1"
-    const val GOOGLE_MATERIAL_VERSION = "1.4.0"
+    const val GOOGLE_MATERIAL_VERSION = "1.8.0-alpha01"
     const val ANDROIDX_SWIPE_REFRESH_LAYOUT_VERSION = "1.1.0"
     const val ANDROIDX_FRAGMENT_TESTING_VERSION = "1.3.3"
 
     const val DI_KOIN_VERSION = "3.0.2"
+
+    const val SLIDER_VERSION = "1.4.0"
+
+
+    const val material = "1.2.1"
+    const val koin = "2.0.1"
+    const val livedata_testing_lib = "1.1.2"
+    const val junit = "4.12"
+    const val androidx_ext_junit = "1.1.1"
+    const val androidx_testing = "1.2.0"
+    const val testing_core = "1.4.0"
+    const val fragments_testing = "1.2.0-rc03"
+    const val mockk = "1.10.6"
+    const val arch_core_testing = "2.1.0"
+    const val coroutines_test = "1.4.2"
 }
