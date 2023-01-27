@@ -1,4 +1,4 @@
-apply from: "$rootDir/${CommonBuild.FeatureModule}"
+apply from: "$rootDir/common-feature-di.gradle"
 android {
 
     packagingOptions {
@@ -6,22 +6,24 @@ android {
             excludes += ['META-INF/DEPENDENCIES', 'META-INF/LICENSE', 'META-INF/LICENSE.txt', 'META-INF/license.txt', 'META-INF/NOTICE', 'META-INF/NOTICE.txt', 'META-INF/notice.txt', 'META-INF/ASL2.0', 'META-INF/LGPL2.1', 'META-INF/AL2.0', 'META-INF/*.kotlin_module', 'META-INF/proguard/androidx-annotations.pro']
         }
     }
-    namespace 'com.harera.product'
+    namespace 'com.harera.manger.product'
 }
 
 dependencies {
-    implementation Libs.picasso
-
-    implementation Libs.adMob
-    implementation Libs.firebaseFirestore
-    implementation Libs.firebaseAuth
-    implementation Libs.viewModels
-    implementation Libs.navigationUi
-    implementation Libs.navigationFragment
+    implementation project(UiComponents.image)
+    implementation project(UiComponents.product)
+    implementation project(UiComponents.common)
+    api project(Data.repository)
 
     implementation Libs.liveData
+
+    implementation Libs.playServicesTasks
     kapt(Libs.hiltAndroidCompiler)
     implementation(Libs.hiltAndroid)
-    implementation Libs.lifeCycleRuntime
-    implementation Libs.playServicesTasks
+
+    implementation Libs.gligarPicker
+    implementation Libs.androidxCore
+
+    implementation Libs.navigationFragment
+    implementation Libs.materialDesign
 }

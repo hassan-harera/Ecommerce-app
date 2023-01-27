@@ -1,4 +1,4 @@
-apply from: "$rootDir/${CommonBuild.FeatureModule}"
+apply from: "$rootDir/common-feature-di.gradle"
 android {
 
     packagingOptions {

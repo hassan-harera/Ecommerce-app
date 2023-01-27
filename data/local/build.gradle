@@ -1,4 +1,4 @@
-apply from: "$rootDir/android-library.gradle"
+apply from: "$rootDir/data-module-di.gradle"
 apply plugin: ("dagger.hilt.android.plugin")
 
 android {
@@ -12,8 +12,6 @@ android {
 }
 
 dependencies {
-    api project(Data.model)
-
     api(Libs.roomRunTime)
     kapt(Libs.roomCompiler)
 

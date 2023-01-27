@@ -1,12 +1,12 @@
 object ManagerFeatures {
-    const val addCategory = ":manager-features:add-category"
-    const val product = ":manager-features:product"
-    const val editProduct = ":manager-features:edit-product"
-    const val categories = ":manager-features:categories"
-    const val login = ":manager-features:login"
-    const val dashboard = ":manager-features:dashboard"
-    const val addOffersGroup = ":manager-features:add-offers-group"
-    const val addProduct = ":manager-features:add-product"
+    const val addCategory = ":features:add-category"
+    const val product = ":features:product"
+    const val editProduct = ":features:edit-product"
+    const val categories = ":features:categories"
+    const val login = ":features:login"
+    const val dashboard = ":features:dashboard"
+    const val addOffersGroup = ":features:add-offers-group"
+    const val addProduct = ":features:add-product"
 
 
 }

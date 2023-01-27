@@ -26,7 +26,6 @@ android {
 
 dependencies {
     implementation(Room.roomRuntime)
-    implementation(Room.roomKtx)
     annotationProcessor(Room.roomCompiler)
     kapt(Room.roomCompiler)
 }

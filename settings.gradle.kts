@@ -24,13 +24,13 @@ include(
     ":navigation:user-login",
 )
 
-include(":manager-features")
-include(":manager-features:add-category")
-include(":manager-features:login")
-include(":manager-features:dashboard")
-include(":manager-features:product")
-include(":manager-features:edit-product")
-include(":manager-features:edit-categories")
+include(":features")
+include(":features:add-category")
+include(":features:login")
+include(":features:dashboard")
+include(":features:product")
+include(":features:edit-product")
+include(":features:edit-categories")
 
 include(
     ":features",
@@ -60,6 +60,12 @@ include(":features:dashboard")
 include(
     ":ui-components",
     ":ui-components:user-locator",
+    ":ui-components:cart-item",
+    ":ui-components:category-image",
+    ":ui-components:category-name",
+    ":ui-components:image-card",
+    ":ui-components:product",
+    ":ui-components:wish-item",
 )
 
 include(

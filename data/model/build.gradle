@@ -1,4 +1,4 @@
-apply from:"$rootDir/android-library.gradle"
+apply from:"$rootDir/data-module-di.gradle"
 android {
 
     packagingOptions {

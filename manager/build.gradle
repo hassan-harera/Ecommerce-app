@@ -49,5 +49,4 @@ android {
 dependencies {
     implementation project(Navigation.manager)
     implementation project(ManagerFeatures.login)
-    implementation project(ManagerFeatures.SPLASH)
 }
