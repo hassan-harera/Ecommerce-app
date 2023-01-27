@@ -1,4 +1,4 @@
-apply from:"$rootDir/android-library.gradle"
+apply from: "$rootDir/${CommonBuild.DATA_MODULE}"
 apply plugin: 'com.google.gms.google-services'
 apply plugin: ("dagger.hilt.android.plugin")
 
